@@ -6,4 +6,9 @@ set(CMAKE_CXX_STANDARD 14)
 
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -W -Wall -Wextra -O2 -pedantic")
 
-add_executable(huffman_crypto main.c b-tree/b-tree.c huffman-tree/huffman-tree.c)
+add_executable(huffman_crypto
+        main.c
+        b-tree/b-tree.c
+        huffman-tree/huffman-tree.c
+        huffman-tree/minheap.c
+        )
