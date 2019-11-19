@@ -2,7 +2,7 @@
 
 #include "huffman-tree.h"
 
-// Private
+// PRIVATE
 hfm_Tree* create_node(
         int prob,
         char symbol,
@@ -21,7 +21,7 @@ hfm_Tree* create_node(
     return hf;
 }
 
-// Public
+// PUBLIC
 hfm_Tree* hfm_Create() {
     return NULL;
 }
