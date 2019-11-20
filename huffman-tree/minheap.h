@@ -3,10 +3,9 @@
 
 #include <limits.h>
 
-#define HFM_T_MIN INT_MIN
+#include "../common/common.h"
 
-
-typedef int hfm_T_Minheap;
+typedef cmn_Rune hfm_T_Minheap;
 
 typedef struct hfm_minheap {
     hfm_T_Minheap *data;
@@ -14,10 +13,14 @@ typedef struct hfm_minheap {
     int tail;
 } hfm_Minheap;
 
+hfm_T_Minheap HFM_T_ERROR = {INT_MIN, '0'};
+
 hfm_Minheap* hfm_Create_Minheap(int size);
 void hfm_Insert_Minheap(hfm_Minheap *mh, hfm_T_Minheap data);
 hfm_T_Minheap hfm_Peek_Minheap(hfm_Minheap *mh);
 hfm_T_Minheap hfm_Pop_Minheap(hfm_Minheap *mh);
+
+hfm_Minheap* hfm_Increase_Size_Minheap(hfm_Minheap *mh, int to_inc);
 
 void hfm_Destroy_Minheap(hfm_Minheap *mh);
 

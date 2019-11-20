@@ -34,7 +34,7 @@ bool has_right(int i, int tail) {
 void heapify_up(hfm_Minheap *mh) {
     int i = mh->tail;
 
-    while (has_parent(i) && mh->data[i] < mh->data[get_parent(i)]) {
+    while (has_parent(i) && mh->data[i].prob < mh->data[get_parent(i)].prob) {
         hfm_T_Minheap aux = mh->data[i];
         mh->data[i] = mh->data[get_parent(i)];
         mh->data[get_parent(i)] = aux;
@@ -48,10 +48,10 @@ void heapify_down(hfm_Minheap *mh) {
 
     while (has_left(i, mh->tail)) {
         smaller = get_left(i);
-        if (has_right(i, mh->tail) && mh->data[get_right(i)] < mh->data[get_left(i)])
+        if (has_right(i, mh->tail) && mh->data[get_right(i)].prob < mh->data[get_left(i)].prob)
             smaller = get_right(i);
 
-        if (mh->data[i] < mh->data[smaller]) return;
+        if (mh->data[i].prob < mh->data[smaller].prob) return;
         else {
             hfm_T_Minheap aux = mh->data[i];
             mh->data[i] = mh->data[smaller];
@@ -83,13 +83,13 @@ void hfm_Insert_Minheap(hfm_Minheap *mh, hfm_T_Minheap data) {
 }
 
 hfm_T_Minheap hfm_Peek_Minheap(hfm_Minheap *mh) {
-    if (mh->tail < 0) return HFM_T_MIN;
+    if (mh->tail < 0) return HFM_T_ERROR;
 
     return mh->data[0];
 }
 
 hfm_T_Minheap hfm_Pop_Minheap(hfm_Minheap *mh) {
-    if (mh->tail < 0) return HFM_T_MIN;
+    if (mh->tail < 0) return HFM_T_ERROR;
 
     hfm_T_Minheap aux = mh->data[0];
 
@@ -99,6 +99,18 @@ hfm_T_Minheap hfm_Pop_Minheap(hfm_Minheap *mh) {
     heapify_down(mh);
 
     return aux;
+}
+
+hfm_Minheap* hfm_Increase_Size_Minheap(hfm_Minheap *mh, int to_inc) {
+    hfm_Minheap *new = hfm_Create_Minheap(mh->size+to_inc);
+    new->tail = mh->tail;
+
+    for (int i = 0; i <= mh->tail; i++)
+        new->data[i] = mh->data[i];
+
+    hfm_Destroy_Minheap(mh);
+
+    return new;
 }
 
 void hfm_Destroy_Minheap(hfm_Minheap *mh) {
