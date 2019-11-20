@@ -70,7 +70,7 @@ char** create_code_table(hfm_Node *hn, int table_size) {
 }
 
 void destroy_table(hfm_Tree *ht) {
-    for (int i = 0; i < ht->table_size; i++){
+    for (int i = 0; i < ht->pool_size; i++){
         free(ht->table[i]);
     }
     free(ht->table);
@@ -83,7 +83,7 @@ hfm_Tree* hfm_Create() {
     ht->head = NULL;
     ht->pool = hfm_Create_Minheap(HFM_POOL_SIZE);
     ht->table = NULL;
-    ht->table_size = 0;
+    ht->pool_size = 0;
 
     return ht;
 }
@@ -94,6 +94,7 @@ void hfm_Insert_Pool(hfm_Tree* ht, float prob, char symbol) {
 
     hfm_Node *hn = create_node(prob, symbol, NULL, NULL);
     hfm_Insert_Minheap(ht->pool, hn);
+    ht->pool_size += 1;
 }
 
 void hfm_Insert_Pool_From_File(hfm_Tree* ht, char *file){
@@ -109,9 +110,8 @@ void hfm_Insert_Pool_From_File(hfm_Tree* ht, char *file){
     fclose(f);
 }
 
-void hfm_Gen_Tree(hfm_Tree* ht, int table_size) {
+void hfm_Gen_Tree(hfm_Tree* ht) {
     if (hfm_Is_Empty_Minheap(ht->pool)) return;
-    ht->table_size = table_size;
     destroy_tree(ht->head);
 
     hfm_Node *hn1, *hn2, *head;
@@ -126,7 +126,7 @@ void hfm_Gen_Tree(hfm_Tree* ht, int table_size) {
     }
 
     ht->head = hfm_Pop_Minheap(ht->pool);
-    ht->table = create_code_table(ht->head, ht->table_size);
+    ht->table = create_code_table(ht->head, ht->pool_size);
 }
 
 void hfm_Destroy(hfm_Tree *ht) {

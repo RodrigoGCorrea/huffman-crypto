@@ -41,10 +41,10 @@ int main() {
 //    print2DUtil(ht->head, 1);
 //
 //    hfm_Destroy(ht);
-    hfm_Insert_Pool_From_File(ht, "../probs2.txt");
-    hfm_Gen_Tree(ht, 5);
+    hfm_Insert_Pool_From_File(ht, "../probs.txt");
+    hfm_Gen_Tree(ht);
     print2DUtil(ht->head, 10);
-    for (int i = 0; i<5; i++){
+    for (int i = 0; i < ht->pool_size; i++){
         printf("%s\n", ht->table[i]);
     }
     hfm_Destroy(ht);
