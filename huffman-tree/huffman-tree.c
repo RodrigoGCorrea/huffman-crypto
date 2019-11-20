@@ -43,7 +43,9 @@ void create_code_table_aux(hfm_Node *hn, char **table, char *path) {
     if (!hn) return;
     if (hn->symbol != '-') {
         table[(hn->symbol - 'a')] = path;
+        return;
     }
+
     char *path_left = (char*) malloc(sizeof(path) + sizeof(char));
     char *path_right = (char*) malloc(sizeof(path) + sizeof(char));
     strcpy(path_left, path);
@@ -54,10 +56,10 @@ void create_code_table_aux(hfm_Node *hn, char **table, char *path) {
     create_code_table_aux(hn->right, table, path_right);
 
     if (hn->symbol == '-') {
-        if (hn->left->symbol != '-')
-            free(path_right);
-        if (hn->right->symbol != '-')
+        if (hn->left->symbol == '-')
             free(path_left);
+        if (hn->right->symbol == '-')
+            free(path_right);
     }
 }
 
@@ -126,8 +128,6 @@ void hfm_Gen_Tree(hfm_Tree* ht, int table_size) {
     ht->head = hfm_Pop_Minheap(ht->pool);
     ht->table = create_code_table(ht->head, ht->table_size);
 }
-
-
 
 void hfm_Destroy(hfm_Tree *ht) {
     destroy_table(ht);
