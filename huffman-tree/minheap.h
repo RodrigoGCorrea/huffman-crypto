@@ -4,15 +4,7 @@
 #include <limits.h>
 #include <stdbool.h>
 
-#include "../common/common.h"
-
-typedef cmn_Rune hfm_T_Minheap;
-
-typedef struct hfm_minheap {
-    hfm_T_Minheap *data;
-    int size;
-    int tail;
-} hfm_Minheap;
+#include "structs.h"
 
 hfm_Minheap* hfm_Create_Minheap(int size);
 
