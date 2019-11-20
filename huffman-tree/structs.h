@@ -10,7 +10,6 @@ typedef hfm_Node hfm_T_Minheap;
 struct hfm_node {
     int prob;
     char symbol;
-    bool leaf;
     struct hfm_node *left, *right;
 };
 
@@ -20,7 +19,7 @@ struct hfmt_tree {
 };
 
 struct hfm_minheap {
-    hfm_T_Minheap *data;
+    hfm_T_Minheap **data;
     int size;
     int tail;
 };
