@@ -115,6 +115,8 @@ void hfm_Gen_Tree(hfm_Tree* ht) {
     if (hfm_Is_Empty_Minheap(ht->pool)) return;
     destroy_tree(ht->head);
 
+    hfm_Minheap *bck = hfm_Clone_Minheap(ht->pool);
+
     hfm_Node *hn1, *hn2, *head;
 
     while (ht->pool->tail > 0) {
@@ -128,6 +130,60 @@ void hfm_Gen_Tree(hfm_Tree* ht) {
 
     ht->head = hfm_Pop_Minheap(ht->pool);
     ht->table = create_code_table(ht->head, ht->pool_size);
+
+    hfm_Destroy_Minheap(ht->pool);
+    ht->pool = bck;
+}
+
+char* hfm_Encode_String(hfm_Tree *ht, char *msg) {
+    if (ht->table == NULL) return NULL;
+
+    int size = 0;
+    for (int i = 0; i < strlen(msg); i++)
+        size += strlen(ht->table[msg[i] - 'a']);
+
+    char *encoded = (char *) malloc(size + 1);
+    strcpy(encoded, "");
+    for (int i = 0; i < strlen(msg); i++)
+        strcat(encoded, ht->table[msg[i] - 'a']);
+
+    return encoded;
+}
+
+char* hfm_Decode_String(hfm_Tree *ht, char *encoded) {
+    if (ht->table == NULL) return NULL;
+
+    int size = 0;
+    hfm_Node *aux = ht->head;
+    for (int i = 0; i <= strlen(encoded); i++) {
+        if (aux->symbol != '-') {
+            size++;
+            aux = ht->head;
+        }
+
+        if (encoded[i] == '0')
+            aux = aux->left;
+        else
+            aux = aux->right;
+    }
+
+    aux = ht->head;
+    char *msg = (char*) malloc(sizeof(char) * size + 1);
+    int count = 0;
+    for (int i = 0; i <= strlen(encoded); i++) {
+        if (aux->symbol != '-') {
+            msg[count] = aux->symbol;
+            count++;
+            aux = ht->head;
+        }
+
+        if (encoded[i] == '0')
+            aux = aux->left;
+        else
+            aux = aux->right;
+    }
+
+    return msg;
 }
 
 void hfm_Destroy(hfm_Tree *ht) {
