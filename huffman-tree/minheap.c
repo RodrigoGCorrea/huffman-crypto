@@ -102,6 +102,17 @@ hfm_T_Minheap hfm_Pop_Minheap(hfm_Minheap *mh) {
     return aux;
 }
 
+hfm_Minheap* hfm_Clone_Minheap(hfm_Minheap *mh) {
+    hfm_Minheap *clone = hfm_Create_Minheap(mh->size);
+
+    clone->tail = mh->tail;
+
+    for (int i = 0; i <= mh->tail; i++)
+        clone->data[i] = mh->data[i];
+
+    return clone;
+}
+
 hfm_Minheap* hfm_Increase_Size_Minheap(hfm_Minheap *mh, int to_inc) {
     hfm_Minheap *new = hfm_Create_Minheap(mh->size+to_inc);
     new->tail = mh->tail;
