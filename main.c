@@ -42,14 +42,11 @@ int main() {
 //
 //    hfm_Destroy(ht);
     hfm_Insert_Pool_From_File(ht, "../probs2.txt");
-    hfm_Gen_Tree(ht);
+    hfm_Gen_Tree(ht, 5);
     print2DUtil(ht->head, 10);
-    char **dale = create_code_table(ht->head);
     for (int i = 0; i<5; i++){
-        printf("%s\n", dale[i]);
-        free(dale[i]);
+        printf("%s\n", ht->table[i]);
     }
-    free(dale);
     hfm_Destroy(ht);
     return 0;
 }

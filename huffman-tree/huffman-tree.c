@@ -61,7 +61,18 @@ void create_code_table_aux(hfm_Node *hn, char **table, char *path) {
     }
 }
 
+char** create_code_table(hfm_Node *hn, int table_size) {
+    char **table = (char**) malloc(sizeof(char*) * table_size);
+    create_code_table_aux(hn, table, "");
+    return table;
+}
 
+void destroy_table(hfm_Tree *ht) {
+    for (int i = 0; i < ht->table_size; i++){
+        free(ht->table[i]);
+    }
+    free(ht->table);
+}
 
 // PUBLIC
 hfm_Tree* hfm_Create() {
@@ -69,6 +80,8 @@ hfm_Tree* hfm_Create() {
 
     ht->head = NULL;
     ht->pool = hfm_Create_Minheap(HFM_POOL_SIZE);
+    ht->table = NULL;
+    ht->table_size = 0;
 
     return ht;
 }
@@ -94,8 +107,9 @@ void hfm_Insert_Pool_From_File(hfm_Tree* ht, char *file){
     fclose(f);
 }
 
-void hfm_Gen_Tree(hfm_Tree* ht) {
+void hfm_Gen_Tree(hfm_Tree* ht, int table_size) {
     if (hfm_Is_Empty_Minheap(ht->pool)) return;
+    ht->table_size = table_size;
     destroy_tree(ht->head);
 
     hfm_Node *hn1, *hn2, *head;
@@ -110,15 +124,13 @@ void hfm_Gen_Tree(hfm_Tree* ht) {
     }
 
     ht->head = hfm_Pop_Minheap(ht->pool);
+    ht->table = create_code_table(ht->head, ht->table_size);
 }
 
-char** create_code_table(hfm_Node *hn) {
-    char **table = (char**) malloc(sizeof(char*) * 26);
-    create_code_table_aux(hn, table, "");
-    return table;
-}
+
 
 void hfm_Destroy(hfm_Tree *ht) {
+    destroy_table(ht);
     destroy_tree(ht->head);
     hfm_Destroy_Minheap(ht->pool);
     free(ht);
