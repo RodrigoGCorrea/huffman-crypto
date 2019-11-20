@@ -4,6 +4,8 @@
 #include "minheap.h"
 
 // PRIVATE
+hfm_T_Minheap HFM_T_ERROR = {INT_MIN, '0'};
+
 int get_parent(int i) {
     return (i-1)/2;
 }

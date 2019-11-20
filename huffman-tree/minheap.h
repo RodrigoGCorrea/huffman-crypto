@@ -13,8 +13,6 @@ typedef struct hfm_minheap {
     int tail;
 } hfm_Minheap;
 
-hfm_T_Minheap HFM_T_ERROR = {INT_MIN, '0'};
-
 hfm_Minheap* hfm_Create_Minheap(int size);
 void hfm_Insert_Minheap(hfm_Minheap *mh, hfm_T_Minheap data);
 hfm_T_Minheap hfm_Peek_Minheap(hfm_Minheap *mh);
