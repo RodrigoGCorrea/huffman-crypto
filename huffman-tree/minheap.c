@@ -130,6 +130,11 @@ bool hfm_Is_Full_Minheap(hfm_Minheap *mh) {
     else return false;
 }
 
+bool hfm_Is_Empty_Minheap(hfm_Minheap *mh) {
+    if (mh->tail == -1) return true;
+    else return false;
+}
+
 void hfm_Destroy_Minheap(hfm_Minheap *mh) {
     free(mh->data);
     free(mh);

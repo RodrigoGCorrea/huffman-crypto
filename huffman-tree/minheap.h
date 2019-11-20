@@ -23,6 +23,7 @@ hfm_T_Minheap hfm_Pop_Minheap(hfm_Minheap *mh);
 hfm_Minheap* hfm_Clone_Minheap(hfm_Minheap *mh);
 hfm_Minheap* hfm_Increase_Size_Minheap(hfm_Minheap *mh, int to_inc);
 bool hfm_Is_Full_Minheap(hfm_Minheap *mh);
+bool hfm_Is_Empty_Minheap(hfm_Minheap *mh);
 
 void hfm_Destroy_Minheap(hfm_Minheap *mh);
 
