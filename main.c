@@ -41,8 +41,10 @@ int main() {
 //    print2DUtil(ht->head, 1);
 //
 //    hfm_Destroy(ht);
-    hfm_Insert_Pool_From_File(ht, "C:\\UFF\\2019.2\\Estrutura de Dados\\huffman-crypto\\probs.txt");
+    hfm_Insert_Pool_From_File(ht, "../probs.txt");
     hfm_Gen_Tree(ht);
     print2DUtil(ht->head, 10);
+
+    hfm_Destroy(ht);
     return 0;
 }
