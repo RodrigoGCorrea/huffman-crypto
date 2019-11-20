@@ -46,8 +46,9 @@ void create_code_table_aux(hfm_Node *hn, char **table, char *path) {
         return;
     }
 
-    char *path_left = (char*) malloc(sizeof(path) + sizeof(char));
-    char *path_right = (char*) malloc(sizeof(path) + sizeof(char));
+    char *path_left = (char*) malloc(strlen(path) + 2);
+    char *path_right = (char*) malloc(strlen(path) + 2);
+
     strcpy(path_left, path);
     strcpy(path_right, path);
     strcat(path_left, "0");
