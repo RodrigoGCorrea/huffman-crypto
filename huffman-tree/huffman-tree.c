@@ -1,11 +1,10 @@
 #include <stdlib.h>
-#include <stdbool.h>
 
 #include "huffman-tree.h"
 
 // PRIVATE
 hfm_Node* create_node(
-        int prob,
+        float prob,
         char symbol,
         hfm_Node *left,
         hfm_Node *right
@@ -49,7 +48,7 @@ hfm_Tree* hfm_Create() {
     return ht;
 }
 
-void hfm_Insert_Pool(hfm_Tree* ht, int prob, char symbol) {
+void hfm_Insert_Pool(hfm_Tree* ht, float prob, char symbol) {
     if (hfm_Is_Full_Minheap(ht->pool))
         ht->pool = hfm_Increase_Size_Minheap(ht->pool, HFM_POOL_SIZE_INC);
 
@@ -73,6 +72,19 @@ void hfm_Gen_Tree(hfm_Tree* ht) {
     }
 
     ht->head = hfm_Pop_Minheap(ht->pool);
+}
+
+void hfm_Insert_Pool_From_File(hfm_Tree* ht, char *file){
+    FILE *f = fopen(file, "r");
+    if (!f) exit(1);
+    char symbol[2], probs[10];
+    float prob;
+    while (!feof(f)){
+        fscanf(f, "%s %s", symbol, probs);
+        prob = strtof(probs, NULL);
+        hfm_Insert_Pool(ht, prob, symbol[0]);
+    }
+    fclose(f);
 }
 
 void hfm_Destroy(hfm_Tree *ht) {

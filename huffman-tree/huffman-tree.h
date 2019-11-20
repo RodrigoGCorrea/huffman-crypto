@@ -4,13 +4,16 @@
 #define HFM_POOL_SIZE 20
 #define HFM_POOL_SIZE_INC 20
 
+#include <stdio.h>
+
 #include "structs.h"
 #include "minheap.h"
 
 hfm_Tree* hfm_Create();
 
-void hfm_Insert_Pool(hfm_Tree* ht, int prob, char symbol);
+void hfm_Insert_Pool(hfm_Tree* ht, float prob, char symbol);
 void hfm_Gen_Tree(hfm_Tree* ht);
+void hfm_Insert_Pool_From_File(hfm_Tree* ht, char *file);
 
 void hfm_Destroy(hfm_Tree *ht);
 

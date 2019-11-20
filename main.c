@@ -3,14 +3,13 @@
 
 #include "huffman-tree/huffman-tree.h"
 
-void print2DUtil(hfm_Node *root, int space)
-{
+void print2DUtil(hfm_Node *root, int space) {
     // Base case
     if (root == NULL)
         return;
 
     // Increase distance between levels
-    space += 5;
+    space += 10;
 
     // Process right child first
     print2DUtil(root->right, space);
@@ -18,9 +17,9 @@ void print2DUtil(hfm_Node *root, int space)
     // Print current node after space
     // count
     printf("\n");
-    for (int i = 5; i < space; i++)
+    for (int i = 10; i < space; i++)
         printf(" ");
-    printf("[%i, %c]\n", root->prob, root->symbol);
+    printf("[%f, %c]\n", root->prob, root->symbol);
 
     // Process left child
     print2DUtil(root->left, space);
@@ -29,19 +28,21 @@ void print2DUtil(hfm_Node *root, int space)
 
 int main() {
     hfm_Tree *ht = hfm_Create();
-
-    hfm_Insert_Pool(ht, 19, 'a');
-    hfm_Insert_Pool(ht, 1, 'b');
-    hfm_Insert_Pool(ht, 2, 'c');
-    hfm_Insert_Pool(ht, 8, 'd');
-    hfm_Insert_Pool(ht, 99, 'e');
-    hfm_Insert_Pool(ht, 7, 'f');
-
+//
+//    hfm_Insert_Pool(ht, 19, 'a');
+//    hfm_Insert_Pool(ht, 1, 'b');
+//    hfm_Insert_Pool(ht, 2, 'c');
+//    hfm_Insert_Pool(ht, 8, 'd');
+//    hfm_Insert_Pool(ht, 99, 'e');
+//    hfm_Insert_Pool(ht, 7, 'f');
+//
+//    hfm_Gen_Tree(ht);
+//
+//    print2DUtil(ht->head, 1);
+//
+//    hfm_Destroy(ht);
+    hfm_Insert_Pool_From_File(ht, "C:\\UFF\\2019.2\\Estrutura de Dados\\huffman-crypto\\probs.txt");
     hfm_Gen_Tree(ht);
-
-    print2DUtil(ht->head, 1);
-
-    hfm_Destroy(ht);
-
+    print2DUtil(ht->head, 10);
     return 0;
 }

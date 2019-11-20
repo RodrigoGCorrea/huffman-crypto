@@ -8,7 +8,7 @@ typedef struct hfm_minheap hfm_Minheap;
 typedef hfm_Node hfm_T_Minheap;
 
 struct hfm_node {
-    int prob;
+    float prob;
     char symbol;
     struct hfm_node *left, *right;
 };
