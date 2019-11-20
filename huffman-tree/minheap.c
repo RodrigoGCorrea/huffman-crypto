@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <stdbool.h>
 
 #include "minheap.h"
 
@@ -113,6 +112,11 @@ hfm_Minheap* hfm_Increase_Size_Minheap(hfm_Minheap *mh, int to_inc) {
     hfm_Destroy_Minheap(mh);
 
     return new;
+}
+
+bool hfm_Is_Full_Minheap(hfm_Minheap *mh) {
+    if (mh->size == mh->tail+1) return true;
+    else return false;
 }
 
 void hfm_Destroy_Minheap(hfm_Minheap *mh) {
