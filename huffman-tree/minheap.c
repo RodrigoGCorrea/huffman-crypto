@@ -112,6 +112,16 @@ hfm_Minheap* hfm_Increase_Size_Minheap(hfm_Minheap *mh, int to_inc) {
     return new;
 }
 
+hfm_Minheap* hfm_Clone_Minheap(hfm_Minheap *mh) {
+    hfm_Minheap *cloned = hfm_Create_Minheap(mh->size);
+    cloned->tail = mh->tail;
+
+    for (int i = 0; i <= mh->tail; i++)
+        cloned->data[i] = mh->data[i];
+
+    return cloned;
+}
+
 bool hfm_Is_Full_Minheap(hfm_Minheap *mh) {
     if (mh->size == mh->tail+1) return true;
     else return false;
