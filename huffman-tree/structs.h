@@ -16,6 +16,7 @@ struct hfm_node {
 struct hfmt_tree {
     hfm_Minheap *pool;
     hfm_Node *head;
+    char **table;
 };
 
 struct hfm_minheap {

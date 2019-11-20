@@ -52,6 +52,13 @@ void create_code_table_aux(hfm_Node *hn, char **table, char *path) {
     strcat(path_right, "1");
     create_code_table_aux(hn->left, table, path_left);
     create_code_table_aux(hn->right, table, path_right);
+
+    if (hn->symbol == '-') {
+        if (hn->left->symbol != '-')
+            free(path_right);
+        if (hn->right->symbol != '-')
+            free(path_left);
+    }
 }
 
 
