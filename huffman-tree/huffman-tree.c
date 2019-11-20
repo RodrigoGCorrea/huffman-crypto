@@ -1,19 +1,20 @@
 #include <stdlib.h>
+#include <string.h>
 
 #include "huffman-tree.h"
 
 // PRIVATE
 hfm_Node* create_node(
-        float prob,
-        char symbol,
-        hfm_Node *left,
-        hfm_Node *right
-) {
-    hfm_Node *hn = (hfm_Node*) malloc(sizeof(hfm_Node));
-    hn->prob = prob;
-    hn->symbol = symbol;
-    hn->left = left;
-    hn->right = right;
+            float prob,
+            char symbol,
+            hfm_Node *left,
+            hfm_Node *right
+    ) {
+        hfm_Node *hn = (hfm_Node*) malloc(sizeof(hfm_Node));
+        hn->prob = prob;
+        hn->symbol = symbol;
+        hn->left = left;
+        hn->right = right;
 
     return hn;
 }
@@ -22,9 +23,9 @@ hfm_Node* join_node(hfm_Node *hn1, hfm_Node *hn2) {
     hfm_Node *parent = NULL;
 
     if (hn1->prob < hn2->prob) {
-        parent = create_node(hn1->prob + hn2->prob, '0', hn2, hn1);
+        parent = create_node(hn1->prob + hn2->prob, '-', hn2, hn1);
     } else {
-        parent = create_node(hn1->prob + hn2->prob, '0', hn1, hn2);
+        parent = create_node(hn1->prob + hn2->prob, '-', hn1, hn2);
     }
 
     return parent;
@@ -37,6 +38,23 @@ void destroy_tree(hfm_Node *hn) {
         free(hn);
     }
 }
+
+void create_code_table_aux(hfm_Node *hn, char **table, char *path) {
+    if (!hn) return;
+    if (hn->symbol != '-') {
+        table[(hn->symbol - 'a')] = path;
+    }
+    char *path_left = (char*) malloc(sizeof(path) + sizeof(char));
+    char *path_right = (char*) malloc(sizeof(path) + sizeof(char));
+    strcpy(path_left, path);
+    strcpy(path_right, path);
+    strcat(path_left, "0");
+    strcat(path_right, "1");
+    create_code_table_aux(hn->left, table, path_left);
+    create_code_table_aux(hn->right, table, path_right);
+}
+
+
 
 // PUBLIC
 hfm_Tree* hfm_Create() {
@@ -54,6 +72,19 @@ void hfm_Insert_Pool(hfm_Tree* ht, float prob, char symbol) {
 
     hfm_Node *hn = create_node(prob, symbol, NULL, NULL);
     hfm_Insert_Minheap(ht->pool, hn);
+}
+
+void hfm_Insert_Pool_From_File(hfm_Tree* ht, char *file){
+    FILE *f = fopen(file, "r");
+    if (!f) exit(1);
+    char symbol[2], probs[10];
+    float prob;
+    while (!feof(f)){
+        fscanf(f, "%s %s", symbol, probs);
+        prob = strtof(probs, NULL);
+        hfm_Insert_Pool(ht, prob, symbol[0]);
+    }
+    fclose(f);
 }
 
 void hfm_Gen_Tree(hfm_Tree* ht) {
@@ -74,17 +105,10 @@ void hfm_Gen_Tree(hfm_Tree* ht) {
     ht->head = hfm_Pop_Minheap(ht->pool);
 }
 
-void hfm_Insert_Pool_From_File(hfm_Tree* ht, char *file){
-    FILE *f = fopen(file, "r");
-    if (!f) exit(1);
-    char symbol[2], probs[10];
-    float prob;
-    while (!feof(f)){
-        fscanf(f, "%s %s", symbol, probs);
-        prob = strtof(probs, NULL);
-        hfm_Insert_Pool(ht, prob, symbol[0]);
-    }
-    fclose(f);
+char** create_code_table(hfm_Node *hn) {
+    char **table = (char**) malloc(sizeof(char*) * 26);
+    create_code_table_aux(hn, table, "");
+    return table;
 }
 
 void hfm_Destroy(hfm_Tree *ht) {
