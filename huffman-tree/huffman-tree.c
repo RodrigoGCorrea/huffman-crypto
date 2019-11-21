@@ -70,7 +70,7 @@ char** hfm_create_code_table(hfm_Node *hn, int table_size) {
     return table;
 }
 
-void destroy_table(hfm_Tree *ht) {
+void hfm_destroy_table(hfm_Tree *ht) {
     for (int i = 0; i < ht->pool_size; i++){
         free(ht->table[i]);
     }
@@ -187,7 +187,7 @@ char* hfm_Decode_String(hfm_Tree *ht, char *encoded) {
 }
 
 void hfm_Destroy(hfm_Tree *ht) {
-    destroy_table(ht);
+    hfm_destroy_table(ht);
     hfm_destroy_tree(ht->head);
     hfm_Destroy_Minheap(ht->pool);
     free(ht);
