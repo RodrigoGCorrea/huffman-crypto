@@ -49,7 +49,7 @@ bt_Node* search_node(bt_Node* bn, int key){
     return search_node(bn->child[i], key);
 }
 
-bt_Node* division_aux(bt_Node *bn1, int i, bt_Node* bn2, int t){
+bt_Node* split_node(bt_Node *bn1, int i, bt_Node *bn2, int t){
     bt_Node *aux = create_node(t);
 
     aux->nkey = t - 1;
@@ -79,7 +79,7 @@ bt_Node* division_aux(bt_Node *bn1, int i, bt_Node* bn2, int t){
     return bn1;
 }
 
-bt_Node *insert_node_incomplete(bt_Node *bn, int key, int t){
+bt_Node* insert_node_incomplete(bt_Node *bn, int key, int t){
     int i = bn->nkey - 1;
 
     if (bn->leaf == true) {
@@ -99,7 +99,7 @@ bt_Node *insert_node_incomplete(bt_Node *bn, int key, int t){
 
     i++;
     if (bn->child[i]->nkey == ((2*t)-1)) {
-        bn = division_aux(bn, (i+1), bn->child[i], t);
+        bn = split_node(bn, (i + 1), bn->child[i], t);
         if(key>bn->key[i]) i++;
     }
 
@@ -108,7 +108,7 @@ bt_Node *insert_node_incomplete(bt_Node *bn, int key, int t){
     return bn;
 }
 
-bt_Node *insert_node(bt_Node *bn, int key, int t){
+bt_Node* insert_node(bt_Node *bn, int key, int t){
     if (search_node(bn, key))
         return bn;
 
@@ -126,7 +126,7 @@ bt_Node *insert_node(bt_Node *bn, int key, int t){
         bn2->leaf = 0;
         bn2->child[0] = bn;
 
-        bn2 = division_aux(bn2, 1, bn, t);
+        bn2 = split_node(bn2, 1, bn, t);
         bn2 = insert_node_incomplete(bn2, key, t);
 
         return bn2;
