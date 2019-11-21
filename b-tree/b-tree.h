@@ -9,7 +9,7 @@ typedef struct bt_tree bt_Tree;
 typedef struct bt_node bt_Node;
 
 struct bt_tree{
-    int height;
+    int t;
     bt_Node *head;
 };
 
@@ -21,7 +21,7 @@ struct bt_node{
 };
 
 
-bt_Tree* bt_Create(int height);
+bt_Tree* bt_Create(int t);
 
 void bt_Insert(bt_Tree *bt, int key);
 void bt_Remove(bt_Tree *bt, int key);
