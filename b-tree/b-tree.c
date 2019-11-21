@@ -4,7 +4,7 @@
 #include "b-tree.h"
 
 // PRIVATE
-bt_Node* create_node(int t){
+bt_Node* bt_create_node(int t){
     bt_Node* bn = (bt_Node *) malloc(sizeof(bt_Node));
     bn->nkey = 0;
     bn->key = (int *) malloc(sizeof(int) * ((t * 2) - 1));
@@ -17,11 +17,11 @@ bt_Node* create_node(int t){
     return bn;
 }
 
-void destroy_tree(bt_Node *bn){
+void bt_destroy_node(bt_Node *bn){
     if (bn != NULL) {
         if (bn->child != NULL) {
             for (int i = 0; i <= bn->nkey; i++)
-                destroy_tree(bn->child[i]);
+                bt_destroy_node(bn->child[i]);
         }
 
         free(bn->key);
@@ -30,7 +30,7 @@ void destroy_tree(bt_Node *bn){
     }
 }
 
-bt_Node* search_node(bt_Node* bn, int key){
+bt_Node* bt_search_node(bt_Node *bn, int key){
     bt_Node *found = NULL;
 
     if (bn == NULL)
@@ -46,11 +46,11 @@ bt_Node* search_node(bt_Node* bn, int key){
     if (bn->leaf)
         return found;
 
-    return search_node(bn->child[i], key);
+    return bt_search_node(bn->child[i], key);
 }
 
-bt_Node* split_node(bt_Node *parent, int i, bt_Node *c_complete, int t){
-    bt_Node *c_new = create_node(t);
+bt_Node* bt_split_node(bt_Node *parent, int i, bt_Node *c_complete, int t){
+    bt_Node *c_new = bt_create_node(t);
 
     c_new->nkey = t - 1;
     c_new->leaf = c_complete->leaf;
@@ -80,7 +80,7 @@ bt_Node* split_node(bt_Node *parent, int i, bt_Node *c_complete, int t){
     return parent;
 }
 
-bt_Node* insert_node_incomplete(bt_Node *bn, int key, int t){
+bt_Node* bt_insert_node_incomplete(bt_Node *bn, int key, int t){
     int i = bn->nkey - 1;
 
     if (bn->leaf == true) {
@@ -100,21 +100,21 @@ bt_Node* insert_node_incomplete(bt_Node *bn, int key, int t){
 
     i++;
     if (bn->child[i]->nkey == ((2 * t) - 1)) {
-        bn = split_node(bn, (i + 1), bn->child[i], t);
+        bn = bt_split_node(bn, (i + 1), bn->child[i], t);
         if (key > bn->key[i]) i++;
     }
 
-    bn->child[i] = insert_node_incomplete(bn->child[i], key, t);
+    bn->child[i] = bt_insert_node_incomplete(bn->child[i], key, t);
 
     return bn;
 }
 
-bt_Node* insert_node(bt_Node *bn, int key, int t){
-    if (search_node(bn, key))
+bt_Node* bt_insert_node(bt_Node *bn, int key, int t){
+    if (bt_search_node(bn, key))
         return bn;
 
     if (bn == NULL) {
-        bn = create_node(t);
+        bn = bt_create_node(t);
         bn->key[0] = key;
         bn->nkey = 1;
 
@@ -122,23 +122,23 @@ bt_Node* insert_node(bt_Node *bn, int key, int t){
     }
 
     if (bn->nkey == (2*t)-1) {
-        bt_Node *bn2 = create_node(t);
+        bt_Node *bn2 = bt_create_node(t);
         bn2->nkey = 0;
         bn2->leaf = false;
         bn2->child[0] = bn;
 
-        bn2 = split_node(bn2, 1, bn, t);
-        bn2 = insert_node_incomplete(bn2, key, t);
+        bn2 = bt_split_node(bn2, 1, bn, t);
+        bn2 = bt_insert_node_incomplete(bn2, key, t);
 
         return bn2;
     }
 
-    bn = insert_node_incomplete(bn, key, t);
+    bn = bt_insert_node_incomplete(bn, key, t);
 
     return bn;
 }
 
-bt_Node* remove_node_aux(bt_Node *bn, int key, int t){
+bt_Node* bt_remove_node_aux(bt_Node *bn, int key, int t){
     if (bn == NULL)
         return NULL;
 
@@ -173,7 +173,7 @@ bt_Node* remove_node_aux(bt_Node *bn, int key, int t){
 
             //Eliminar recursivamente K e substitua K por K' em x
             int temp = aux->key[aux->nkey-1];
-            bn->child[i] = remove_node_aux(bn->child[i], temp, t);
+            bn->child[i] = bt_remove_node_aux(bn->child[i], temp, t);
             bn->key[i] = temp;
 
             return bn;
@@ -190,7 +190,7 @@ bt_Node* remove_node_aux(bt_Node *bn, int key, int t){
 
             //Eliminar recursivamente K e substitua K por K' em x
             int temp = aux->key[0];
-            aux = remove_node_aux(bn->child[i + 1], temp, t);
+            aux = bt_remove_node_aux(bn->child[i + 1], temp, t);
             bn->key[i] = temp;
 
             return bn;
@@ -214,15 +214,15 @@ bt_Node* remove_node_aux(bt_Node *bn, int key, int t){
 
             aux1->nkey = 2*t-1;
 
-            for (j=i; j < bn->nkey-1; j++)   //remove_node_aux key de bn
+            for (j=i; j < bn->nkey-1; j++)   //bt_remove_node_aux key de bn
                 bn->key[j] = bn->key[j+1];
 
-            for (j=i+1; j <= bn->nkey; j++)  //remove_node_aux ponteiro para child[i+1]
+            for (j=i+1; j <= bn->nkey; j++)  //bt_remove_node_aux ponteiro para child[i+1]
                 bn->child[j] = bn->child[j+1];
 
             bn->child[j] = NULL;
             bn->nkey--;
-            bn->child[i] = remove_node_aux(bn->child[i], key, t);
+            bn->child[i] = bt_remove_node_aux(bn->child[i], key, t);
 
             return bn;
         }
@@ -253,7 +253,7 @@ bt_Node* remove_node_aux(bt_Node *bn, int key, int t){
                 z->child[j] = z->child[j+1];
 
             z->nkey--;
-            bn->child[i] = remove_node_aux(bn->child[i], key, t);
+            bn->child[i] = bt_remove_node_aux(bn->child[i], key, t);
 
             return bn;
         }
@@ -279,7 +279,7 @@ bt_Node* remove_node_aux(bt_Node *bn, int key, int t){
             y->child[0] = z->child[z->nkey];         //enviar ponteiro de z para o novo elemento em y
             z->nkey--;
 
-            bn->child[i] = remove_node_aux(y, key, t);
+            bn->child[i] = bt_remove_node_aux(y, key, t);
 
             return bn;
         }
@@ -312,7 +312,7 @@ bt_Node* remove_node_aux(bt_Node *bn, int key, int t){
                 }
 
                 bn->nkey--;
-                bn = remove_node_aux(bn, key, t);
+                bn = bt_remove_node_aux(bn, key, t);
 
                 return bn;
             }
@@ -342,23 +342,23 @@ bt_Node* remove_node_aux(bt_Node *bn, int key, int t){
 
                 bn->nkey--;
                 bn->child[i-1] = z;
-                bn = remove_node_aux(bn, key, t);
+                bn = bt_remove_node_aux(bn, key, t);
 
                 return bn;
             }
         }
     }
 
-    bn->child[i] = remove_node_aux(bn->child[i], key, t);
+    bn->child[i] = bt_remove_node_aux(bn->child[i], key, t);
 
     return bn;
 }
 
-bt_Node* remove_node(bt_Node* bn, int key, int t){
-    if (bn == NULL || search_node(bn, key) == NULL)
+bt_Node* bt_remove_node(bt_Node *bn, int key, int t){
+    if (bn == NULL || bt_search_node(bn, key) == NULL)
         return bn;
 
-    return remove_node_aux(bn, key, t);
+    return bt_remove_node_aux(bn, key, t);
 }
 
 // PUBLIC
@@ -371,19 +371,19 @@ bt_Tree* bt_Create(int t) {
 }
 
 void bt_Insert(bt_Tree *bt, int key) {
-    bt->head = insert_node(bt->head, key, bt->t);
+    bt->head = bt_insert_node(bt->head, key, bt->t);
 }
 
 void bt_Remove(bt_Tree *bt, int key) {
-    bt->head = remove_node(bt->head, key, bt->t);
+    bt->head = bt_remove_node(bt->head, key, bt->t);
 }
 
 bt_Node* bt_Search(bt_Tree *bt, int key) {
-    return search_node(bt->head, key);
+    return bt_search_node(bt->head, key);
 }
 
 void bt_Destroy(bt_Tree* bt) {
-    destroy_tree(bt->head);
+    bt_destroy_node(bt->head);
     free(bt);
 }
 
