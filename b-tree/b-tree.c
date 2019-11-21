@@ -5,9 +5,9 @@
 
 // PRIVATE
 bt_Node* create_node(int t){
-    bt_Node* bn = (bt_Node*) malloc(sizeof(bt_Node));
+    bt_Node* bn = (bt_Node *) malloc(sizeof(bt_Node));
     bn->nkey = 0;
-    bn->key = (int *) malloc(sizeof(int) * ((t*2)-1));
+    bn->key = (int *) malloc(sizeof(int) * ((t * 2) - 1));
     bn->leaf = true;
     bn->child = (bt_Node **) malloc(sizeof(bt_Node*) * t * 2);
 
@@ -69,12 +69,12 @@ bt_Node* split_node(bt_Node *parent, int i, bt_Node *c_complete, int t){
 
     for(int j = parent->nkey; j >= i; j--)
         parent->child[j + 1] = parent->child[j];
-
     parent->child[i] = c_new;
-    for(int j = parent->nkey; j >= i; j--)
-        parent->key[j] = parent->key[j-1];
 
+    for(int j = parent->nkey; j >= i; j--)
+        parent->key[j] = parent->key[j - 1];
     parent->key[i - 1] = c_complete->key[t - 1];
+
     parent->nkey++;
 
     return parent;
@@ -95,13 +95,13 @@ bt_Node* insert_node_incomplete(bt_Node *bn, int key, int t){
         return bn;
     }
 
-    while ((i>=0) && (key<bn->key[i]))
+    while ((i >= 0) && (key < bn->key[i]))
         i--;
 
     i++;
-    if (bn->child[i]->nkey == ((2*t)-1)) {
+    if (bn->child[i]->nkey == ((2 * t) - 1)) {
         bn = split_node(bn, (i + 1), bn->child[i], t);
-        if(key>bn->key[i]) i++;
+        if (key > bn->key[i]) i++;
     }
 
     bn->child[i] = insert_node_incomplete(bn->child[i], key, t);
@@ -124,7 +124,7 @@ bt_Node* insert_node(bt_Node *bn, int key, int t){
     if (bn->nkey == (2*t)-1) {
         bt_Node *bn2 = create_node(t);
         bn2->nkey = 0;
-        bn2->leaf = 0;
+        bn2->leaf = false;
         bn2->child[0] = bn;
 
         bn2 = split_node(bn2, 1, bn, t);
