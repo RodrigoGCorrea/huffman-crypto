@@ -1,7 +1,7 @@
 #ifndef HUFFMAN_CRYPTO_STRUCTS_H
 #define HUFFMAN_CRYPTO_STRUCTS_H
 
-typedef struct hfmt_tree hfm_Tree;
+typedef struct hfm_tree hfm_Tree;
 typedef struct hfm_node hfm_Node;
 
 typedef struct hfm_minheap hfm_Minheap;
