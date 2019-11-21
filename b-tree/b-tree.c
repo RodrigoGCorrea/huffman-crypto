@@ -49,34 +49,35 @@ bt_Node* search_node(bt_Node* bn, int key){
     return search_node(bn->child[i], key);
 }
 
-bt_Node* split_node(bt_Node *bn1, int i, bt_Node *bn2, int t){
-    bt_Node *aux = create_node(t);
+bt_Node* split_node(bt_Node *parent, int i, bt_Node *c_complete, int t){
+    bt_Node *c_new = create_node(t);
 
-    aux->nkey = t - 1;
-    aux->leaf = bn2->leaf;
+    c_new->nkey = t - 1;
+    c_new->leaf = c_complete->leaf;
 
     for (int j = 0; j < t-1; j++)
-        aux->key[j] = bn2->key[j+t];
+        c_new->key[j] = c_complete->key[j + t];
 
-    if (bn2->leaf == false){
+    if (c_complete->leaf == false){
         for(int j = 0; j < t; j++){
-            aux->child[j] = bn2->child[j+t];
-            bn2->child[j+t] = NULL;
+            c_new->child[j] = c_complete->child[j + t];
+            c_complete->child[j + t] = NULL;
         }
     }
 
-    bn2->nkey = t-1;
-    for(int j = bn1->nkey; j >= i; j--)
-        bn1->child[j+1] = bn1->child[j];
+    c_complete->nkey = t - 1;
 
-    bn1->child[i] = aux;
-    for(int j = bn1->nkey; j >= i; j--)
-        bn1->key[j] = bn1->key[j-1];
+    for(int j = parent->nkey; j >= i; j--)
+        parent->child[j + 1] = parent->child[j];
 
-    bn1->key[i-1] = bn2->key[t-1];
-    bn1->nkey++;
+    parent->child[i] = c_new;
+    for(int j = parent->nkey; j >= i; j--)
+        parent->key[j] = parent->key[j-1];
 
-    return bn1;
+    parent->key[i - 1] = c_complete->key[t - 1];
+    parent->nkey++;
+
+    return parent;
 }
 
 bt_Node* insert_node_incomplete(bt_Node *bn, int key, int t){
