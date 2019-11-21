@@ -25,6 +25,20 @@ void print2DUtil(hfm_Node *root, int space) {
     print2DUtil(root->left, space);
 }
 
+/*
+void Imprime(TAB *a, int andar){
+    if(a){
+        int i,j;
+        for(i=0; i<=a->nchaves-1; i++){
+            Imprime(a->filho[i],andar+1);
+            for(j=0; j<=andar; j++) printf("   ");
+            printf("%d\n", a->chave[i]);
+        }
+        Imprime(a->filho[i],andar+1);
+    }
+}
+*/
+
 
 int main() {
     hfm_Tree *ht = hfm_Create();
