@@ -13,7 +13,7 @@ struct hfm_node {
     struct hfm_node *left, *right;
 };
 
-struct hfmt_tree {
+struct hfm_tree {
     hfm_Minheap *pool;
     int pool_size;
 
