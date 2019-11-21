@@ -1,8 +1,6 @@
 #ifndef HUFFMAN_CRYPTO_B_TREE_H
 #define HUFFMAN_CRYPTO_B_TREE_H
 
-#define BT_MAX_HEIGHT 2
-
 #include <stdbool.h>
 
 typedef struct bt_tree bt_Tree;
