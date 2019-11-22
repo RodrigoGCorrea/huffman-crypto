@@ -187,6 +187,7 @@ char* hfm_Decode_String(hfm_Tree *ht, char *encoded) {
 }
 
 char* hfm_Encode_Msg(hfm_Tree *ht, char *msg){
+    // Gets the amount of individual strings
     int str_count = 1, i = 0;
     while (i <= strlen(msg)) {
         if (msg[i] == ' ')
@@ -194,8 +195,12 @@ char* hfm_Encode_Msg(hfm_Tree *ht, char *msg){
         i++;
     }
 
+    // Creates an array to hold said strings
     char **str_array = (char **) malloc(sizeof(char *) * str_count);
 
+    // Loop through the original msg and splits it at spaces
+    // take pointer to its strings splitted and stores it in the str_array
+    // and finally counts the size for the final answer
     int size_answer = 0, aux_str_count = 0;
     char *tok = strtok(msg, " ");
     char *aux = NULL;
@@ -209,8 +214,10 @@ char* hfm_Encode_Msg(hfm_Tree *ht, char *msg){
         aux_str_count++;
     }
 
+    // Creates an string for the final answer
     char *answer = (char *) malloc(sizeof(char) * size_answer + str_count);
 
+    // Concat the answer with the strings in the str_array
     strcpy(answer, "");
     strcat(answer, str_array[0]);
     free(str_array[0]);
