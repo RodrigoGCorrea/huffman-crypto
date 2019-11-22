@@ -6,6 +6,8 @@
 #include "huffman-tree/huffman-tree.h"
 #include "b-tree/b-tree.h"
 
+#define MAX_SIZE_INPUT 500
+
 void print2DUtil(hfm_Node *root, int space) {
     // Base case
     if (root == NULL)
@@ -46,25 +48,27 @@ typedef struct options {
 } Options;
 
 void cmd_encrypt_huffman(hfm_Tree *ht) {
-    char input[500];
+    char input[MAX_SIZE_INPUT];
 
-    printf("Digite sua mensagem:\n");
-    fgets(input, sizeof(input), stdin);
+    printf("-> Digite sua mensagem:\n");
+    fgets(input, MAX_SIZE_INPUT, stdin);
 
     int count = 0;
-    while (input[count] != '\0')
+    while (input[count] != '\0') {
+        if (input[count] == '\n')
+            input[count] = '\0';
         count++;
+    }
 
-    char *dale = (char*) malloc(sizeof(char) * (count - 1));
-    strncpy(dale, input, (count - 1));
-    printf("%s\n", dale);
+    char *cleaned_input = (char *) malloc(sizeof(char) * count);
+    strncpy(cleaned_input, input, count);
 
-    char* ans = hfm_Encode_Msg(ht, dale);
-    printf("Mensagem encriptado: ");
-    printf("%s\n", ans);
+    char *answer = hfm_Encode_Msg(ht, cleaned_input);
+    printf("-> Mensagem encriptada:\n");
+    printf("%s\n", answer);
 
-    free(ans);
-    free(dale);
+    free(cleaned_input);
+    free(answer);
 }
 
 void cmd_decrypt_huffman() {
