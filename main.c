@@ -45,6 +45,40 @@ typedef struct options {
     bool huffman;
 } Options;
 
+void cmd_encrypt_huffman(hfm_Tree *ht) {
+    char input[500];
+
+    printf("Digite sua mensagem:\n");
+    fgets(input, sizeof(input), stdin);
+
+    int count = 0;
+    while (input[count] != '\0')
+        count++;
+
+    char *dale = (char*) malloc(sizeof(char) * (count - 1));
+    strncpy(dale, input, (count - 1));
+    printf("%s\n", dale);
+
+    char* ans = hfm_Encode_Msg(ht, dale);
+    printf("Mensagem encriptado: ");
+    printf("%s\n", ans);
+
+    free(ans);
+    free(dale);
+}
+
+void cmd_decrypt_huffman() {
+
+}
+
+void cmd_encrypt_btree() {
+
+}
+
+void cmd_decrypt_btree() {
+
+}
+
 void display_menu(char *sel_tree) {
     printf("Menu: \n");
     printf("1. Mudar tipo de arvore (atual: %s)\n", sel_tree);
@@ -52,10 +86,11 @@ void display_menu(char *sel_tree) {
     printf("3. Decriptar mensagem\n");
 }
 
-void interfacezada(){
-    int cmd = INT_MAX;
-    char sel_tree[40] = "Huffman";
-    char input[500];
+void display_interface(){
+    char cmd_in = '-';
+    int cmd = 0;
+
+    char sel_tree[10] = "Huffman";
 
     hfm_Tree *ht = hfm_Create();
     hfm_Insert_Pool_From_File(ht, "../probs.txt");
@@ -65,7 +100,9 @@ void interfacezada(){
 
     while (cmd != -1) {
         display_menu(sel_tree);
-        scanf("%i", &cmd);
+        scanf("%c", &cmd_in);
+        cmd = cmd_in - '0';
+
         getchar();
 
         if (cmd == 1) {
@@ -79,25 +116,16 @@ void interfacezada(){
                 strcpy(sel_tree, "Huffman");
 
         } else if (cmd == 2) {
-
-            printf("Digite sua mensagem:\n");
-            fgets(input, sizeof(input), stdin);
-
-            int count = 0;
-            while (input[count] != '\0') count++;
-
-            char *dale = (char*) malloc(sizeof(char) * (count - 1));
-            strncpy(dale, input, (count - 1));
-            printf("%s\n", dale);
-
-            char* ans = hfm_Encode_Msg(ht, dale);
-            printf("Mensagem encriptado: ");
-            printf("%s\n", ans);
-
-            free(input);
-            free(dale);
+            if (opt.huffman == true)
+                cmd_encrypt_huffman(ht);
+            if (opt.b_tree == true)
+                cmd_encrypt_btree();
 
         } else if (cmd == 3) {
+            if (opt.huffman == true)
+                cmd_decrypt_huffman();
+            if (opt.b_tree == true)
+                cmd_decrypt_btree();
 
         } else {
             printf("Comando invalido\n");
@@ -107,19 +135,13 @@ void interfacezada(){
 }
 
 int main() {
-//
-//    char *encoded = hfm_Encode_String(ht, "espaco");
-//    printf("%s\n", encoded);
-//
-//    char *msg = hfm_Decode_String(ht, encoded);
-//    printf("%s\n", msg);
-//
-//    free(msg);
-//    free(encoded);
-//
-//    hfm_Destroy(ht);
-//
-    interfacezada();
+    hfm_Tree *ht = hfm_Create();
+    hfm_Insert_Pool_From_File(ht, "../probs.txt");
+    hfm_Gen_Tree(ht);
+
+    cmd_encrypt_huffman(ht);
+
+    hfm_Destroy(ht);
 
     return 0;
 }
