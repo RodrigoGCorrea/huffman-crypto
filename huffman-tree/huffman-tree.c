@@ -186,6 +186,35 @@ char* hfm_Decode_String(hfm_Tree *ht, char *encoded) {
     return msg;
 }
 
+char* hfm_Encode_Msg(hfm_Tree *ht, char* msg){
+    int size = 1, i = 0; 
+    while (i != strlen(msg)) {
+        if (msg[i] == ' ') size++;
+        i++;
+    }
+
+    char **strings = (char**) malloc(sizeof(char*) * size);
+    char *string = strtok(msg, " ");
+    for (int i = 0; i < size; i++) {
+        strings[i] = string;
+        string = strtok(NULL, " ");
+    }
+
+    int size_msg = 0;
+    for (int i = 0; i<size; i++)
+        size_msg += strlen(hfm_Encode_String(ht, strings[i]));
+
+    char *answer = (char*) malloc(sizeof(char) * size_msg + size + 1);
+    strcpy(answer, "");
+    strcat(answer, hfm_Encode_String(ht, strings[0]));
+    for (int i = 1; i<size; i++){
+        strcat(answer, " ");
+        strcat(answer, hfm_Encode_String(ht, strings[i]));
+    }
+
+    return answer;
+}
+
 void hfm_Destroy(hfm_Tree *ht) {
     hfm_destroy_table(ht);
     hfm_destroy_tree(ht->head);

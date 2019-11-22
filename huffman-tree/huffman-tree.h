@@ -18,6 +18,8 @@ void hfm_Gen_Tree(hfm_Tree *ht);
 char* hfm_Encode_String(hfm_Tree *ht, char *msg);
 char* hfm_Decode_String(hfm_Tree *ht, char *msg);
 
+char* hfm_Encode_Msg(hfm_Tree *ht, char* msg);
+
 void hfm_Destroy(hfm_Tree *ht);
 
 // TODO: LOW PRIORITY

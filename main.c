@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
 
 #include "huffman-tree/huffman-tree.h"
+#include "b-tree/b-tree.h"
 
 void print2DUtil(hfm_Node *root, int space) {
     // Base case
@@ -25,35 +28,98 @@ void print2DUtil(hfm_Node *root, int space) {
     print2DUtil(root->left, space);
 }
 
-/*
-void Imprime(TAB *a, int andar){
+void Imprime(bt_Node *a, int andar){
     if(a){
         int i,j;
-        for(i=0; i<=a->nchaves-1; i++){
-            Imprime(a->filho[i],andar+1);
+        for(i=0; i<=a->nkey-1; i++){
+            Imprime(a->child[i],andar+1);
             for(j=0; j<=andar; j++) printf("   ");
-            printf("%d\n", a->chave[i]);
+            printf("%d\n", a->key[i]);
         }
-        Imprime(a->filho[i],andar+1);
+        Imprime(a->child[i],andar+1);
     }
 }
-*/
 
+typedef struct options {
+    bool b_tree;
+    bool huffman;
+} Options;
 
-int main() {
+void display_menu(char *sel_tree) {
+    printf("Menu: \n");
+    printf("1. Mudar tipo de arvore (atual: %s)\n", sel_tree);
+    printf("2. Encriptar mensagem\n");
+    printf("3. Decriptar mensagem\n");
+}
+
+void interfacezada(){
+    int cmd = INT_MAX;
+    char sel_tree[40] = "Huffman";
+    char input[500];
+
     hfm_Tree *ht = hfm_Create();
     hfm_Insert_Pool_From_File(ht, "../probs.txt");
     hfm_Gen_Tree(ht);
 
-    char *encoded = hfm_Encode_String(ht, "espaco");
-    printf("%s\n", encoded);
+    Options opt = {false, true};
 
-    char *msg = hfm_Decode_String(ht, encoded);
-    printf("%s\n", msg);
+    while (cmd != -1) {
+        display_menu(sel_tree);
+        scanf("%i", &cmd);
+        getchar();
 
-    free(msg);
-    free(encoded);
+        if (cmd == 1) {
+            opt.b_tree = !opt.b_tree;
+            opt.huffman = !opt.huffman;
 
-    hfm_Destroy(ht);
+            if (opt.b_tree == true)
+                strcpy(sel_tree, "Arvore B");
+
+            if (opt.huffman == true)
+                strcpy(sel_tree, "Huffman");
+
+        } else if (cmd == 2) {
+
+            printf("Digite sua mensagem:\n");
+            fgets(input, sizeof(input), stdin);
+
+            int count = 0;
+            while (input[count] != '\0') count++;
+
+            char *dale = (char*) malloc(sizeof(char) * (count - 1));
+            strncpy(dale, input, (count - 1));
+            printf("%s\n", dale);
+
+            char* ans = hfm_Encode_Msg(ht, dale);
+            printf("Mensagem encriptado: ");
+            printf("%s\n", ans);
+
+            free(input);
+            free(dale);
+
+        } else if (cmd == 3) {
+
+        } else {
+            printf("Comando invalido\n");
+        }
+        printf("\n\n");
+    }
+}
+
+int main() {
+//
+//    char *encoded = hfm_Encode_String(ht, "espaco");
+//    printf("%s\n", encoded);
+//
+//    char *msg = hfm_Decode_String(ht, encoded);
+//    printf("%s\n", msg);
+//
+//    free(msg);
+//    free(encoded);
+//
+//    hfm_Destroy(ht);
+//
+    interfacezada();
+
     return 0;
 }
