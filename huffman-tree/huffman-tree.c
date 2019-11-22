@@ -183,6 +183,8 @@ char* hfm_Decode_String(hfm_Tree *ht, char *encoded) {
             aux = aux->right;
     }
 
+    msg[size] = '\0';
+
     return msg;
 }
 
