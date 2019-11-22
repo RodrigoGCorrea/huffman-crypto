@@ -84,14 +84,15 @@ void cmd_decrypt_btree() {
 }
 
 void display_menu(char *sel_tree) {
-    printf("Menu: \n");
-    printf("1. Mudar tipo de arvore (atual: %s)\n", sel_tree);
-    printf("2. Encriptar mensagem\n");
-    printf("3. Decriptar mensagem\n");
+    printf("-> Menu: \n");
+    printf("-> 1. Mudar tipo de arvore (atual: %s)\n", sel_tree);
+    printf("-> 2. Encriptar mensagem\n");
+    printf("-> 3. Decriptar mensagem\n");
+    printf("-> 0. Sair\n");
 }
 
 void display_interface(){
-    char cmd_in = '-';
+    char cmd_in;
     int cmd = 0;
 
     char sel_tree[10] = "Huffman";
@@ -104,10 +105,9 @@ void display_interface(){
 
     while (cmd != -1) {
         display_menu(sel_tree);
-        scanf("%c", &cmd_in);
-        cmd = cmd_in - '0';
-
-        getchar();
+        cmd_in = getchar(); // Actual cmd
+        getchar();          // Skips \n
+        cmd = (int) cmd_in - '0';
 
         if (cmd == 1) {
             opt.b_tree = !opt.b_tree;
@@ -131,21 +131,28 @@ void display_interface(){
             if (opt.b_tree == true)
                 cmd_decrypt_btree();
 
+        } else if (cmd == 0) {
+            hfm_Destroy(ht);
+            cmd = -1;
+
         } else {
             printf("Comando invalido\n");
         }
+
         printf("\n\n");
     }
 }
 
 int main() {
-    hfm_Tree *ht = hfm_Create();
-    hfm_Insert_Pool_From_File(ht, "../probs.txt");
-    hfm_Gen_Tree(ht);
+//    hfm_Tree *ht = hfm_Create();
+//    hfm_Insert_Pool_From_File(ht, "../probs.txt");
+//    hfm_Gen_Tree(ht);
+//
+//    cmd_encrypt_huffman(ht);
+//
+//    hfm_Destroy(ht);
 
-    cmd_encrypt_huffman(ht);
-
-    hfm_Destroy(ht);
+    display_interface();
 
     return 0;
 }
