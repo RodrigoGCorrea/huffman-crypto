@@ -186,8 +186,10 @@ char* hfm_Decode_String(hfm_Tree *ht, char *encoded) {
     return msg;
 }
 
-char* hfm_Encode_Msg(hfm_Tree *ht, char* msg){
+char* hfm_Encode_Msg(hfm_Tree *ht, char *msg){
     int str_count = 1, i = 0;
+    char *aux = NULL;
+
     while (i <= strlen(msg)) {
         if (msg[i] == ' ')
             str_count++;
@@ -203,7 +205,6 @@ char* hfm_Encode_Msg(hfm_Tree *ht, char* msg){
     }
 
     int size_msg = 0;
-    char *aux = NULL;
     for (i = 0; i < str_count; i++) {
         aux = hfm_Encode_String(ht, str_array[i]);
         size_msg += strlen(aux);
@@ -212,15 +213,16 @@ char* hfm_Encode_Msg(hfm_Tree *ht, char* msg){
 
     char *answer = (char *) malloc(sizeof(char) * size_msg + str_count);
     strcpy(answer, "");
-    strcat(answer, hfm_Encode_String(ht, str_array[0]));
+    aux = hfm_Encode_String(ht, str_array[0]);
+    strcat(answer, aux);
+    free(aux);
     for (i = 1; i < str_count; i++){
         strcat(answer, " ");
-        strcat(answer, hfm_Encode_String(ht, str_array[i]));
+        aux = hfm_Encode_String(ht, str_array[0]);
+        strcat(answer, aux);
+        free(aux);
     }
 
-    for (i = 0; i < str_count; i++) {
-        free(str_array[i]);
-    }
     free(str_array);
 
     return answer;
