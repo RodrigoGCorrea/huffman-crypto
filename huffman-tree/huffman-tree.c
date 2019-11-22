@@ -233,6 +233,51 @@ char* hfm_Encode_Msg(hfm_Tree *ht, char *msg){
     return answer;
 }
 
+char* hfm_Decode_Msg(hfm_Tree *ht, char *msg){
+    // Gets the amount of individual strings
+    int str_count = 1, i = 0;
+    while (i <= strlen(msg)) {
+        if (msg[i] == '?')
+            str_count++;
+        i++;
+    }
+
+    // Creates an array to hold said strings
+    char **str_array = (char **) malloc(sizeof(char *) * str_count);
+
+    // Loop through the original msg and splits it at spaces
+    // take pointer to its strings splitted and stores it in the str_array
+    // and finally counts the size for the final answer
+    int size_answer = 0, aux_str_count = 0;
+    char *tok = strtok(msg, "?");
+    char *aux = NULL;
+    while (tok != NULL || aux_str_count < str_count) {
+        aux = hfm_Decode_String(ht, tok);
+        str_array[aux_str_count] = aux;
+
+        size_answer += strlen(aux);
+
+        tok = strtok(NULL, "?");
+        aux_str_count++;
+    }
+
+    // Creates an string for the final answer
+    char *answer = (char *) malloc(sizeof(char) * size_answer + str_count);
+
+    // Concat the answer with the strings in the str_array
+    strcpy(answer, "");
+    strcat(answer, str_array[0]);
+    free(str_array[0]);
+    for (i = 1; i < str_count; i++){
+        strcat(answer, " ");
+        strcat(answer, str_array[i]);
+        free(str_array[i]);
+    }
+    free(str_array);
+
+    return answer;
+}
+
 void hfm_Destroy(hfm_Tree *ht) {
     hfm_destroy_table(ht);
     hfm_destroy_tree(ht->head);

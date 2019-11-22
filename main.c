@@ -71,8 +71,28 @@ void cmd_encrypt_huffman(hfm_Tree *ht) {
     free(answer);
 }
 
-void cmd_decrypt_huffman() {
+void cmd_decrypt_huffman(hfm_Tree *ht) {
+    char input[MAX_SIZE_INPUT];
 
+    printf("-> Digite sua mensagem encriptada:\n");
+    fgets(input, MAX_SIZE_INPUT, stdin);
+
+    int count = 0;
+    while (input[count] != '\0') {
+        if (input[count] == '\n')
+            input[count] = '\0';
+        count++;
+    }
+
+    char *cleaned_input = (char *) malloc(sizeof(char) * count);
+    strncpy(cleaned_input, input, count);
+
+    char *answer = hfm_Decode_Msg(ht, cleaned_input);
+    printf("-> Mensagem decriptada:\n");
+    printf("%s\n", answer);
+
+    free(cleaned_input);
+    free(answer);
 }
 
 void cmd_encrypt_btree() {
@@ -127,7 +147,7 @@ void display_interface(){
 
         } else if (cmd == 3) {
             if (opt.huffman == true)
-                cmd_decrypt_huffman();
+                cmd_decrypt_huffman(ht);
             if (opt.b_tree == true)
                 cmd_decrypt_btree();
 
@@ -144,15 +164,16 @@ void display_interface(){
 }
 
 int main() {
-//    hfm_Tree *ht = hfm_Create();
-//    hfm_Insert_Pool_From_File(ht, "../probs.txt");
-//    hfm_Gen_Tree(ht);
-//
-//    cmd_encrypt_huffman(ht);
-//
-//    hfm_Destroy(ht);
+    hfm_Tree *ht = hfm_Create();
+    hfm_Insert_Pool_From_File(ht, "../probs.txt");
+    hfm_Gen_Tree(ht);
 
-    display_interface();
+//    cmd_encrypt_huffman(ht);
+    cmd_decrypt_huffman(ht);
+
+    hfm_Destroy(ht);
+
+//    display_interface();
 
     return 0;
 }
