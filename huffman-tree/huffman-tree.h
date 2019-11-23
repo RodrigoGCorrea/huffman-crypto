@@ -4,8 +4,6 @@
 #define HFM_POOL_SIZE 20
 #define HFM_POOL_SIZE_INC 20
 
-#include <stdio.h>
-
 #include "structs.h"
 #include "minheap.h"
 
