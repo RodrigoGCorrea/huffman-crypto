@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "huffman-tree/huffman-tree.h"
 #include "b-tree/b-tree.h"
@@ -20,6 +21,7 @@ void cmd_encrypt_huffman(hfm_Tree *ht) {
     printf("-> Digite sua mensagem:\n");
     fgets(input, MAX_SIZE_INPUT, stdin);
 
+    // Clean input
     int count = 0;
     while (input[count] != '\0') {
         if (input[count] == '\n')
@@ -30,6 +32,11 @@ void cmd_encrypt_huffman(hfm_Tree *ht) {
     char *cleaned_input = (char *) malloc(sizeof(char) * count);
     strncpy(cleaned_input, input, count);
 
+    // To lower case
+    for (int i = 0; i < strlen(cleaned_input); i++)
+        cleaned_input[i] = tolower(cleaned_input[i]);
+
+    // Encode input
     char *answer = hfm_Encode_Msg(ht, cleaned_input);
     printf("-> Mensagem encriptada:\n");
     printf("%s\n", answer);

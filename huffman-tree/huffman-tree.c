@@ -201,18 +201,17 @@ char* hfm_Encode_Msg(hfm_Tree *ht, char *msg){
     char **str_array = (char **) malloc(sizeof(char *) * str_count);
 
     // Loop through the original msg and splits it at spaces
-    // take pointer to its strings splitted and stores it in the str_array
+    // take pointer to the splitted strings and stores it in the str_array
     // and finally counts the size for the final answer
     int size_answer = 0, aux_str_count = 0;
-    char *tok = strtok(msg, " ");
+    char *tok;
     char *aux = NULL;
-    while (tok != NULL || aux_str_count < str_count) {
+    for (tok = strtok(msg, " "); tok != NULL; tok = strtok(NULL, " ")) {
         aux = hfm_Encode_String(ht, tok);
-        str_array[aux_str_count] = aux;
 
+        str_array[aux_str_count] = aux;
         size_answer += strlen(aux);
 
-        tok = strtok(NULL, " ");
         aux_str_count++;
     }
 
@@ -245,19 +244,18 @@ char* hfm_Decode_Msg(hfm_Tree *ht, char *msg){
     // Creates an array to hold said strings
     char **str_array = (char **) malloc(sizeof(char *) * str_count);
 
-    // Loop through the original msg and splits it at spaces
-    // take pointer to its strings splitted and stores it in the str_array
+    // Loop through the original msg and splits it at ?
+    // take pointer to the splitted strings and stores it in the str_array
     // and finally counts the size for the final answer
     int size_answer = 0, aux_str_count = 0;
-    char *tok = strtok(msg, "?");
+    char *tok;
     char *aux = NULL;
-    while (tok != NULL || aux_str_count < str_count) {
+    for (tok = strtok(msg, "?"); tok != NULL; tok = strtok(NULL, "?")) {
         aux = hfm_Decode_String(ht, tok);
-        str_array[aux_str_count] = aux;
 
+        str_array[aux_str_count] = aux;
         size_answer += strlen(aux);
 
-        tok = strtok(NULL, "?");
         aux_str_count++;
     }
 
