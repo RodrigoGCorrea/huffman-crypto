@@ -8,39 +8,6 @@
 
 #define MAX_SIZE_INPUT 500
 
-void print2DUtil(hfm_Node *root, int space) {
-    // Base case
-    if (root == NULL)
-        return;
-
-    // Increase distance between levels
-    space += 10;
-
-    // Process right child first
-    print2DUtil(root->right, space);
-
-    // Print current node after space
-    // count
-    printf("\n");
-    for (int i = 10; i < space; i++)
-        printf(" ");
-    printf("[%f, %c]\n", root->prob, root->symbol);
-
-    // Process left child
-    print2DUtil(root->left, space);
-}
-
-void Imprime(bt_Node *a, int andar){
-    if(a){
-        int i,j;
-        for(i=0; i<=a->nkey-1; i++){
-            Imprime(a->child[i],andar+1);
-            for(j=0; j<=andar; j++) printf("   ");
-            printf("%d\n", a->key[i]);
-        }
-        Imprime(a->child[i],andar+1);
-    }
-}
 
 typedef struct options {
     bool b_tree;
@@ -103,11 +70,40 @@ void cmd_decrypt_btree() {
 
 }
 
+void cmd_print_huffman(hfm_Node *root, int space) {
+    if (root == NULL)
+        return;
+
+    space += 10;
+
+    cmd_print_huffman(root->right, space);
+
+    printf("\n");
+    for (int i = 10; i < space; i++)
+        printf(" ");
+    printf("[%f, %c]\n", root->prob, root->symbol);
+
+    cmd_print_huffman(root->left, space);
+}
+
+void cmd_print_btree(bt_Node *a, int level){
+    if(a){
+        int i,j;
+        for(i=0; i<=a->nkey-1; i++){
+            cmd_print_btree(a->child[i], level + 1);
+            for(j=0; j<=level; j++) printf("   ");
+            printf("%d\n", a->key[i]);
+        }
+        cmd_print_btree(a->child[i], level + 1);
+    }
+}
+
 void display_menu(char *sel_tree) {
     printf("-> Menu: \n");
     printf("-> 1. Mudar tipo de arvore (atual: %s)\n", sel_tree);
     printf("-> 2. Encriptar mensagem\n");
     printf("-> 3. Decriptar mensagem\n");
+    printf("-> 4. Imprimir arvore atual\n");
     printf("-> 0. Sair\n");
 }
 
@@ -151,6 +147,12 @@ void display_interface(){
             if (opt.b_tree == true)
                 cmd_decrypt_btree();
 
+        } else if (cmd == 4) {
+            if (opt.huffman == true)
+                cmd_print_huffman(ht->head, 5);
+            if (opt.b_tree == true)
+                cmd_print_btree(NULL, 5);
+
         } else if (cmd == 0) {
             hfm_Destroy(ht);
             cmd = -1;
@@ -164,16 +166,16 @@ void display_interface(){
 }
 
 int main() {
-    hfm_Tree *ht = hfm_Create();
-    hfm_Insert_Pool_From_File(ht, "../probs.txt");
-    hfm_Gen_Tree(ht);
-
+//    hfm_Tree *ht = hfm_Create();
+//    hfm_Insert_Pool_From_File(ht, "../probs.txt");
+//    hfm_Gen_Tree(ht);
+//
 //    cmd_encrypt_huffman(ht);
-    cmd_decrypt_huffman(ht);
+//    cmd_decrypt_huffman(ht);
+//
+//    hfm_Destroy(ht);
 
-    hfm_Destroy(ht);
-
-//    display_interface();
+    display_interface();
 
     return 0;
 }
