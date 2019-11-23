@@ -99,7 +99,7 @@ void cmd_print_btree(bt_Node *a, int level){
         for(i=0; i<=a->nkey-1; i++){
             cmd_print_btree(a->child[i], level + 1);
             for(j=0; j<=level; j++) printf("   ");
-            printf("%d\n", a->key[i]);
+            printf("[%c, %.2f]\n", a->info[i].key, a->info[i].prob);
         }
         cmd_print_btree(a->child[i], level + 1);
     }
@@ -181,8 +181,52 @@ int main() {
 //    cmd_decrypt_huffman(ht);
 //
 //    hfm_Destroy(ht);
+//    display_interface();
 
-    display_interface();
+    bt_Tree *bt = bt_Create(2);
+
+    bt_T_Info a = {'a', 11};
+    bt_Insert(bt, a);
+
+    a.key = 'b';
+    a.prob = 9;
+    bt_Insert(bt, a);
+
+    a.key = 'c';
+    a.prob = 9;
+    bt_Insert(bt, a);
+
+    a.key = 'd';
+    a.prob = 9;
+    bt_Insert(bt, a);
+
+    a.key = 'e';
+    a.prob = 9;
+    bt_Insert(bt, a);
+
+    cmd_print_btree(bt->head, 0);
+
+    bt_Remove(bt, a);
+
+    cmd_print_btree(bt->head, 0);
+
+    a.key = 'f';
+    a.prob = 9;
+    bt_Insert(bt, a);
+
+    a.key = 'r';
+    a.prob = 9;
+    bt_Insert(bt, a);
+
+    a.key = 'p';
+    a.prob = 9;
+    bt_Insert(bt, a);
+
+    a.key = 'o';
+    a.prob = 9;
+    bt_Insert(bt, a);
+
+    cmd_print_btree(bt->head, 0);
 
     return 0;
 }
