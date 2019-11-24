@@ -8,6 +8,7 @@ typedef struct bt_node bt_Node;
 typedef struct bt_info bt_Info;
 
 typedef bt_Info bt_T_Info;
+typedef char bt_T_Key;
 
 struct bt_tree {
     int t;
@@ -24,7 +25,7 @@ struct bt_node {
 };
 
 struct bt_info {
-    char key;
+    bt_T_Key key;
     float prob;
 };
 
@@ -32,9 +33,9 @@ struct bt_info {
 bt_Tree* bt_Create(int t);
 
 void bt_Insert(bt_Tree *bt, bt_T_Info info);
-void bt_Remove(bt_Tree *bt, bt_T_Info info);
+void bt_Remove(bt_Tree *bt, bt_T_Key key);
 
-bt_Node* bt_Search(bt_Tree *bt, bt_T_Info info);
+bt_Node* bt_Search(bt_Tree *bt, bt_T_Key key);
 
 void bt_Destroy(bt_Tree* bt);
 
