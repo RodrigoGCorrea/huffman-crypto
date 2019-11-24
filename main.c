@@ -5,7 +5,7 @@
 #include <ctype.h>
 
 #include "huffman-tree/huffman-tree.h"
-#include "b-tree/b-tree.h"
+#include "b-tree/encrypt.h"
 
 #define MAX_SIZE_INPUT 500
 
@@ -173,60 +173,26 @@ void display_interface(){
 }
 
 int main() {
-//    hfm_Tree *ht = hfm_Create();
-//    hfm_Insert_Pool_From_File(ht, "../probs.txt");
-//    hfm_Gen_Tree(ht);
-//
-//    cmd_encrypt_huffman(ht);
-//    cmd_decrypt_huffman(ht);
-//
-//    hfm_Destroy(ht);
-//    display_interface();
 
-    bt_Tree *bt = bt_Create(2);
-
-    bt_T_Info a = {'a', 11};
-    bt_Insert(bt, a);
-
-    a.key = 'b';
-    a.prob = 9;
-    bt_Insert(bt, a);
-
-    a.key = 'c';
-    a.prob = 9;
-    bt_Insert(bt, a);
-
-    a.key = 'd';
-    a.prob = 9;
-    bt_Insert(bt, a);
-
-    a.key = 'e';
-    a.prob = 9;
-    bt_Insert(bt, a);
+    bt_Tree *bt = bt_Gen_Tree_From_File("../probs.txt", 2);
 
     cmd_print_btree(bt->head, 0);
 
-    bt_Remove(bt, a);
+    bt_Remove(bt, 'a');
 
+    printf("--------\n");
     cmd_print_btree(bt->head, 0);
 
-    a.key = 'f';
-    a.prob = 9;
-    bt_Insert(bt, a);
+    bt_Remove(bt, 'p');
+    bt_Remove(bt, 'q');
+    bt_Remove(bt, 'x');
+    bt_Remove(bt, 'r');
+    bt_Remove(bt, 'k');
 
-    a.key = 'r';
-    a.prob = 9;
-    bt_Insert(bt, a);
-
-    a.key = 'p';
-    a.prob = 9;
-    bt_Insert(bt, a);
-
-    a.key = 'o';
-    a.prob = 9;
-    bt_Insert(bt, a);
-
+    printf("--------\n");
     cmd_print_btree(bt->head, 0);
+
+    bt_Destroy(bt);
 
     return 0;
 }
