@@ -3,9 +3,10 @@
 #include <string.h>
 
 #include "encrypt.h"
+#include "list.h"
 
 // PRIVATE
-char* bt_encode_string_aux(bt_Node *bn, bt_T_Key key, char *path) {
+char* bt_encode_string_aux(bt_Node *bn, bt_T_Key key, char *path, bt_List **pt_trash) {
     if (bn == NULL)
         return NULL;
 
@@ -13,13 +14,15 @@ char* bt_encode_string_aux(bt_Node *bn, bt_T_Key key, char *path) {
     while (i < bn->nkey && key > bn->info[i].key)
         i++;
 
-    char *number = malloc(sizeof(char));
+    char *number = (char *) malloc(sizeof(char) + 1);
     sprintf(number, "%i", i);
 
-    char *new_path = (char*) malloc(strlen(path) + 2);
+    char *new_path = (char *) malloc(strlen(path) + 2);
     strcpy(new_path, path);
     strcat(new_path, number);
     free(number);
+
+    *pt_trash = bt_Append_List(*pt_trash, new_path);
 
     if (i < bn->nkey && key == bn->info[i].key)
         return new_path;
@@ -27,7 +30,7 @@ char* bt_encode_string_aux(bt_Node *bn, bt_T_Key key, char *path) {
     if (bn->leaf)
         return NULL;
 
-    return bt_encode_string_aux(bn->child[i], key, new_path);
+    return bt_encode_string_aux(bn->child[i], key, new_path, pt_trash);
 }
 
 // PUBLIC
@@ -56,24 +59,34 @@ char* bt_Encode_String(bt_Tree *bt, char *msg) {
     if (!msg) return NULL;
     if (!bt) return NULL;
 
+    bt_List *pointers_trash = bt_Create_List();
+
     int size = 0;
     for (int i = 0; i < strlen(msg); i++) {
-        char *aux = bt_encode_string_aux(bt->head, msg[i], "");
+        pointers_trash = NULL;
+
+        char *aux = bt_encode_string_aux(bt->head, msg[i], "", &pointers_trash);
+
         size += strlen(aux);
-        free(aux);
+
+        bt_Destroy_List(pointers_trash);
     }
 
     char *encoded = (char*) malloc(sizeof(char) * size + strlen(msg) + 1);
     strcpy(encoded, "");
     for (int i = 0; i < strlen(msg); i++) {
-        char *aux = bt_encode_string_aux(bt->head, msg[i], "");
+        pointers_trash = NULL;
+        char *aux = bt_encode_string_aux(bt->head, msg[i], "", &pointers_trash);
 
-        char *level = (char*) malloc(sizeof(char));
+        char *level = (char*) malloc(sizeof(char) + 1);
+
         sprintf(level, "%i", (int) strlen(aux) - 1);
         strcat(encoded, level);
         strcat(encoded, aux);
 
-        free(aux);
+        free(level);
+
+        bt_Destroy_List(pointers_trash);
     }
 
     return encoded;

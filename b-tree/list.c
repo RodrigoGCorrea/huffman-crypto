@@ -17,7 +17,7 @@ bt_List* bt_Append_List(bt_List *btl, char *info) {
     }
 
     bt_List *p = btl;
-    while (btl->next != NULL)
+    while (p->next != NULL)
          p = p->next;
 
     p->next = aux;
@@ -29,10 +29,10 @@ void bt_Destroy_List(bt_List *btl) {
     if (btl == NULL) return;
 
     bt_List *aux = btl;
-    while (btl->next != NULL) {
+    while (btl != NULL) {
         btl = btl->next;
         free(aux->info);
         free(aux);
-        aux = btl->next;
+        aux = btl;
     }
 }
