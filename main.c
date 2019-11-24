@@ -70,10 +70,73 @@ void cmd_decrypt_huffman(hfm_Tree *ht) {
 }
 
 void cmd_encrypt_btree() {
+    char input[MAX_SIZE_INPUT];
 
+    int t = 0;
+    printf("-> Digite a ordem da arvore:\n");
+    scanf("%i", &t);
+    getchar();
+
+    bt_Tree *bt = bt_Gen_Tree_From_File("../probs.txt", t);
+
+    printf("-> Digite sua mensagem:\n");
+    fgets(input, MAX_SIZE_INPUT, stdin);
+
+    // Clean input
+    int count = 0;
+    while (input[count] != '\0') {
+        if (input[count] == '\n')
+            input[count] = '\0';
+        count++;
+    }
+
+    char *cleaned_input = (char *) malloc(sizeof(char) * count);
+    strncpy(cleaned_input, input, count);
+
+    // To lower case
+    for (int i = 0; i < strlen(cleaned_input); i++)
+        cleaned_input[i] = tolower(cleaned_input[i]);
+
+    // Encode input
+    char *answer = bt_Encode_Msg(bt, cleaned_input);
+    printf("-> Mensagem encriptada:\n");
+    printf("%s\n", answer);
+
+    bt_Destroy(bt);
+    free(cleaned_input);
+    free(answer);
 }
 
 void cmd_decrypt_btree() {
+    char input[MAX_SIZE_INPUT];
+
+    int t = 0;
+    printf("-> Digite a ordem da arvore:\n");
+    scanf("%i", &t);
+    getchar();
+
+    bt_Tree *bt = bt_Gen_Tree_From_File("../probs.txt", t);
+
+    printf("-> Digite sua mensagem encriptada:\n");
+    fgets(input, MAX_SIZE_INPUT, stdin);
+
+    int count = 0;
+    while (input[count] != '\0') {
+        if (input[count] == '\n')
+            input[count] = '\0';
+        count++;
+    }
+
+    char *cleaned_input = (char *) malloc(sizeof(char) * count);
+    strncpy(cleaned_input, input, count);
+
+    char *answer = bt_Decode_Msg(bt, cleaned_input);
+    printf("-> Mensagem decriptada:\n");
+    printf("%s\n", answer);
+
+    bt_Destroy(bt);
+    free(cleaned_input);
+    free(answer);
 
 }
 
@@ -162,8 +225,17 @@ void display_interface(){
         } else if (cmd == 4) {
             if (opt.huffman == true)
                 cmd_print_huffman(ht->head, 5);
-            if (opt.b_tree == true)
-                cmd_print_btree(NULL, 5);
+            if (opt.b_tree == true) {
+                int t = 0;
+                printf("-> Digite a ordem da arvore:\n");
+                scanf("%i", &t);
+
+                bt_Tree *bt = bt_Gen_Tree_From_File("../probs.txt", t);
+
+                cmd_print_btree(bt->head, 5);
+
+                bt_Destroy(bt);
+            }
 
         } else if (cmd == 0) {
             hfm_Destroy(ht);
@@ -178,32 +250,7 @@ void display_interface(){
 }
 
 int main() {
-
-    bt_Tree *bt = bt_Gen_Tree_From_File("../probs.txt", 2);
-
-//    cmd_print_btree(bt->head, 0);
-
-    char *dale = bt_Encode_String(bt, "ola");
-    printf("%s\n", dale);
-
-    char *dale2 = bt_Decode_String(bt, dale);
-    printf("%s", dale2);
-//
-//    bt_Node *bn = bt_Search(bt, 'd');
-//
-//    printf("\n---------\n");
-//    cmd_print_btree(bn, 0);
-//
-//    bn = bt_Search(bt, 'x');
-//
-//    printf("\n---------\n");
-//    cmd_print_btree(bn, 0);
-
-//    char *dale = bt_Encode_String(bt, "ola");
-//    printf("%s", dale);
-//
-//    free(dale);
-    bt_Destroy(bt);
+    display_interface();
 
     return 0;
 }

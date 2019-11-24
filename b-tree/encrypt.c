@@ -59,7 +59,7 @@ char* bt_Encode_String(bt_Tree *bt, char *msg) {
     if (!msg) return NULL;
     if (!bt) return NULL;
 
-    bt_List *pointers_trash = bt_Create_List();
+    bt_List *pointers_trash;
 
     int size = 0;
     for (int i = 0; i < strlen(msg); i++) {
@@ -117,4 +117,92 @@ char* bt_Decode_String(bt_Tree *bt, char*msg) {
     }
 
     return decoded;
+}
+
+char* bt_Encode_Msg(bt_Tree *bt, char *msg) {
+    // Gets the amount of individual strings
+    int str_count = 1, i = 0;
+    while (i <= strlen(msg)) {
+        if (msg[i] == ' ')
+            str_count++;
+        i++;
+    }
+
+    // Creates an array to hold said strings
+    char **str_array = (char **) malloc(sizeof(char *) * str_count);
+
+    // Loop through the original msg and splits it at spaces
+    // take pointer to the splitted strings and stores it in the str_array
+    // and finally counts the size for the final answer
+    int size_answer = 0, aux_str_count = 0;
+    char *tok;
+    char *aux = NULL;
+    for (tok = strtok(msg, " "); tok != NULL; tok = strtok(NULL, " ")) {
+        aux = bt_Encode_String(bt, tok);
+
+        str_array[aux_str_count] = aux;
+        size_answer += strlen(aux);
+
+        aux_str_count++;
+    }
+
+    // Creates an string for the final answer
+    char *answer = (char *) malloc(sizeof(char) * size_answer + str_count);
+
+    // Concat the answer with the strings in the str_array
+    strcpy(answer, "");
+    strcat(answer, str_array[0]);
+    free(str_array[0]);
+    for (i = 1; i < str_count; i++){
+        strcat(answer, "?");
+        strcat(answer, str_array[i]);
+        free(str_array[i]);
+    }
+    free(str_array);
+
+    return answer;
+}
+
+char* bt_Decode_Msg(bt_Tree *bt, char *msg) {
+    // Gets the amount of individual strings
+    int str_count = 1, i = 0;
+    while (i <= strlen(msg)) {
+        if (msg[i] == '?')
+            str_count++;
+        i++;
+    }
+
+    // Creates an array to hold said strings
+    char **str_array = (char **) malloc(sizeof(char *) * str_count);
+
+    // Loop through the original msg and splits it at ?
+    // take pointer to the splitted strings and stores it in the str_array
+    // and finally counts the size for the final answer
+    int size_answer = 0, aux_str_count = 0;
+    char *tok;
+    char *aux = NULL;
+    for (tok = strtok(msg, "?"); tok != NULL; tok = strtok(NULL, "?")) {
+        aux = bt_Decode_String(bt, tok);
+
+        str_array[aux_str_count] = aux;
+        size_answer += strlen(aux);
+
+        aux_str_count++;
+    }
+
+    // Creates an string for the final answer
+    char *answer = (char *) malloc(sizeof(char) * size_answer + str_count);
+
+    // Concat the answer with the strings in the str_array
+    strcpy(answer, "");
+    strcat(answer, str_array[0]);
+    free(str_array[0]);
+    for (i = 1; i < str_count; i++){
+        strcat(answer, " ");
+        strcat(answer, str_array[i]);
+        free(str_array[i]);
+    }
+    free(str_array);
+
+    return answer;
 }
