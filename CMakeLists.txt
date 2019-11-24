@@ -10,6 +10,7 @@ add_executable(huffman_crypto
         main.c
         b-tree/b-tree.c
         b-tree/encrypt.c
+        b-tree/list.c
         huffman-tree/huffman-tree.c
         huffman-tree/minheap.c
         )
