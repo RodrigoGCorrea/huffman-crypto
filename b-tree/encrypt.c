@@ -27,7 +27,7 @@ char* bt_encode_string_aux(bt_Node *bn, bt_T_Key key, char *path) {
     if (bn->leaf)
         return NULL;
 
-    bt_encode_string_aux(bn->child[i], key, new_path);
+    return bt_encode_string_aux(bn->child[i], key, new_path);
 }
 
 // PUBLIC
@@ -64,12 +64,12 @@ char* bt_Encode_String(bt_Tree *bt, char *msg) {
     }
 
     char *encoded = (char*) malloc(sizeof(char) * size + strlen(msg) + 1);
+    strcpy(encoded, "");
     for (int i = 0; i < strlen(msg); i++) {
         char *aux = bt_encode_string_aux(bt->head, msg[i], "");
 
-        strcpy(encoded, "");
-        char level[1];
-        sprintf(level, "%i", strlen(aux) - 1);
+        char *level = (char*) malloc(sizeof(char));
+        sprintf(level, "%i", (int) strlen(aux) - 1);
         strcat(encoded, level);
         strcat(encoded, aux);
 
