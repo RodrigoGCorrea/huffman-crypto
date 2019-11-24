@@ -18,8 +18,6 @@ bt_Node* bt_create_node(int t) {
     return bn;
 }
 
-bt_Info bt_create_key_data();
-
 void bt_destroy_node(bt_Node *bn) {
     if (bn != NULL) {
         if (bn->child != NULL) {
@@ -34,10 +32,8 @@ void bt_destroy_node(bt_Node *bn) {
 }
 
 bt_Node* bt_search_node(bt_Node *bn, bt_T_Key key) {
-    bt_Node *found = NULL;
-
     if (bn == NULL)
-        return found;
+        return NULL;
 
     int i = 0;
     while (i < bn->nkey && key > bn->info[i].key)
@@ -46,8 +42,8 @@ bt_Node* bt_search_node(bt_Node *bn, bt_T_Key key) {
     if (i < bn->nkey && key == bn->info[i].key)
         return bn;
 
-    if (bn->leaf)
-        return found;
+    if (bn->leaf == true)
+        return NULL;
 
     return bt_search_node(bn->child[i], key);
 }
