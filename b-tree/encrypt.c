@@ -3,6 +3,24 @@
 
 #include "encrypt.h"
 
+// PRIVATE
+//char* bt_encode_string_aux(bt_Node *bn, bt_T_Key key) {
+//    if (bn == NULL)
+//        return NULL;
+//
+//    int i = 0;
+//    while (i < bn->nkey && key > bn->info[i].key)
+//        i++;
+//
+//    if (i < bn->nkey && key == bn->info[i].key)
+//        return bn;
+//
+//    if (bn->leaf)
+//        return NULL;
+//
+//    return bt_search_node(bn->child[i], key);
+//}
+
 // PUBLIC
 bt_Tree* bt_Gen_Tree_From_File(char *file, int t) {
     FILE *f = fopen(file, "r");
@@ -23,4 +41,8 @@ bt_Tree* bt_Gen_Tree_From_File(char *file, int t) {
     fclose(f);
 
     return bt;
+}
+
+char* bt_Encode_String(bt_Tree *bt, char *msg) {
+
 }
