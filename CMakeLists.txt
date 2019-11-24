@@ -9,7 +9,7 @@ set(CMAKE_C_STANDARD 11)
 add_executable(huffman_crypto
         main.c
         b-tree/b-tree.c
-        b-tree/encoding.c
+        b-tree/encrypt.c
         huffman-tree/huffman-tree.c
         huffman-tree/minheap.c
         )
