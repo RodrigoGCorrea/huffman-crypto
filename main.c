@@ -183,19 +183,15 @@ int main() {
 
     cmd_print_btree(bt->head, 0);
 
-    bt_Remove(bt, 'a');
+    bt_Node *bn = bt_Search(bt, 'd');
 
-    printf("--------\n");
-    cmd_print_btree(bt->head, 0);
+    printf("\n---------\n");
+    cmd_print_btree(bn, 0);
 
-    bt_Remove(bt, 'p');
-    bt_Remove(bt, 'q');
-    bt_Remove(bt, 'x');
-    bt_Remove(bt, 'r');
-    bt_Remove(bt, 'k');
+    bn = bt_Search(bt, 'x');
 
-    printf("--------\n");
-    cmd_print_btree(bt->head, 0);
+    printf("\n---------\n");
+    cmd_print_btree(bn, 0);
 
     bt_Destroy(bt);
 
