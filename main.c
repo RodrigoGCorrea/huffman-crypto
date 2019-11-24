@@ -182,6 +182,12 @@ int main() {
     bt_Tree *bt = bt_Gen_Tree_From_File("../probs.txt", 2);
 
 //    cmd_print_btree(bt->head, 0);
+
+    char *dale = bt_Encode_String(bt, "ola");
+    printf("%s\n", dale);
+
+    char *dale2 = bt_Decode_String(bt, dale);
+    printf("%s", dale2);
 //
 //    bt_Node *bn = bt_Search(bt, 'd');
 //
@@ -193,10 +199,10 @@ int main() {
 //    printf("\n---------\n");
 //    cmd_print_btree(bn, 0);
 
-    char *dale = bt_Encode_String(bt, "ola");
-    printf("%s", dale);
-
-    free(dale);
+//    char *dale = bt_Encode_String(bt, "ola");
+//    printf("%s", dale);
+//
+//    free(dale);
     bt_Destroy(bt);
 
     return 0;
