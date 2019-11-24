@@ -94,10 +94,9 @@ char* bt_Decode_String(bt_Tree *bt, char*msg) {
         char *decoded_char = (char*) malloc(sizeof(char) + 1);
         int i;
         for (i = j + 1; i < j + msg[j] - '0' + 1; i++) {
-            aux = aux->child[msg[i]];
+            aux = aux->child[msg[i] - '0'];
         }
-        i++;
-        decoded_char[0] = aux->info[i].key;
+        decoded_char[0] = aux->info[msg[i] - '0'].key;
         decoded_char[1] = '\0';
         strcat(decoded, decoded_char);
         j += msg[j] - '0' + 2;
