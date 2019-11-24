@@ -93,15 +93,20 @@ void cmd_print_huffman(hfm_Node *root, int space) {
     cmd_print_huffman(root->left, space);
 }
 
-void cmd_print_btree(bt_Node *a, int level){
-    if(a){
-        int i,j;
-        for(i=0; i<=a->nkey-1; i++){
-            cmd_print_btree(a->child[i], level + 1);
-            for(j=0; j<=level; j++) printf("   ");
-            printf("[%c, %.2f]\n", a->info[i].key, a->info[i].prob);
+void cmd_print_btree(bt_Node *bn, int level){
+    if(bn != NULL) {
+        int i;
+
+        for (i = 0; i <= bn->nkey - 1; i++) {
+            cmd_print_btree(bn->child[i], level + 1);
+
+            for (int j = 0; j <= level; j++)
+                printf("   ");
+
+            printf("[%c, %.2f]\n", bn->info[i].key, bn->info[i].prob);
         }
-        cmd_print_btree(a->child[i], level + 1);
+
+        cmd_print_btree(bn->child[i], level + 1);
     }
 }
 
