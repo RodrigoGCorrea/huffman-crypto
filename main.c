@@ -26,14 +26,15 @@ void display_menu_btree(char *sel_tree) {
     printf("-> 2. Encriptar mensagem\n");
     printf("-> 3. Decriptar mensagem\n");
     printf("-> 4. Imprimir arvore atual\n");
-    printf("-> 5. Imprimir vogais\n");
-    printf("-> 6. Imprimir consoantes\n");
-    printf("-> 7. Imprimir subordinados\n");
+    printf("-> 5. Imprimir subordinados de uma letra\n");
+    printf("-> 6. Imprimir vogais\n");
+    printf("-> 7. Imprimir consoantes\n");
+
     printf("-> 0. Sair\n");
 }
 
 void display_interface(){
-    char cmd_in;
+    char cmd_in = 0;
     int cmd = 0;
 
     char sel_tree[10] = "Huffman";
@@ -50,7 +51,7 @@ void display_interface(){
         if (opt.b_tree == true)
             display_menu_btree(sel_tree);
 
-        cmd_in = getchar(); // Actual cmd
+        scanf("%c", &cmd_in); // Actual cmd
         getchar();          // Skips \n
         cmd = (int) cmd_in - '0';
 
@@ -60,7 +61,6 @@ void display_interface(){
 
             if (opt.b_tree == true)
                 strcpy(sel_tree, "Arvore B");
-
             if (opt.huffman == true)
                 strcpy(sel_tree, "Huffman");
 
@@ -83,6 +83,7 @@ void display_interface(){
                 int t = 0;
                 printf("-> Digite a ordem da arvore:\n");
                 scanf("%i", &t);
+                getchar();
 
                 bt_Tree *bt = bt_Gen_Tree_From_File("../probs_btree.txt", t);
 
@@ -91,10 +92,46 @@ void display_interface(){
                 bt_Destroy(bt);
             }
         } else if (opt.b_tree == true && cmd == 5) {
+            int t = 0;
+            bt_T_Key key;
+
+            printf("-> Digite a ordem da arvore:\n");
+            scanf("%i", &t);
+            getchar();
+            printf("-> Digite a chave a ser buscada:\n");
+            scanf("%c", &key);
+            getchar();
+
+            bt_Tree *bt = bt_Gen_Tree_From_File("../probs_btree.txt", t);
+
+            bt_Node *found_node = bt_Search(bt, key);
+            cmd_Print_Btree_Show_All(found_node, 5);
+
+            bt_Destroy(bt);
 
         } else if (opt.b_tree == true && cmd == 6) {
+            int t = 0;
+            printf("-> Digite a ordem da arvore:\n");
+            scanf("%i", &t);
+            getchar();
+
+            bt_Tree *bt = bt_Gen_Tree_From_File_No_Consonats("../probs_btree.txt", t);
+
+            cmd_Print_Btree(bt->head, 5);
+
+            bt_Destroy(bt);
 
         } else if (opt.b_tree == true && cmd == 7) {
+            int t = 0;
+            printf("-> Digite a ordem da arvore:\n");
+            scanf("%i", &t);
+            getchar();
+
+            bt_Tree *bt = bt_Gen_Tree_From_File_No_Vowels("../probs_btree.txt", t);
+
+            cmd_Print_Btree(bt->head, 5);
+
+            bt_Destroy(bt);
 
         } else if (cmd == 0) {
             hfm_Destroy(ht);
