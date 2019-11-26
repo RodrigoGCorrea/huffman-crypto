@@ -84,7 +84,7 @@ void display_interface(){
                 printf("-> Digite a ordem da arvore:\n");
                 scanf("%i", &t);
 
-                bt_Tree *bt = bt_Gen_Tree_From_File("../probs_hfm.txt", t);
+                bt_Tree *bt = bt_Gen_Tree_From_File("../probs_btree.txt", t);
 
                 cmd_Print_Btree(bt->head, 5);
 
