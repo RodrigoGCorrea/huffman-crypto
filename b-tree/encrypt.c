@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+#include <ctype.h>
 
 #include "encrypt.h"
 #include "list.h"
@@ -40,14 +42,17 @@ bt_Tree* bt_Gen_Tree_From_File(char *file, int t) {
 
     bt_Tree *bt = bt_Create(t);
 
-    char key[2], probs[10];
+    char key[2], probs[10], vowel[2], uppercase_symbol;
     float prob;
+    bool is_vowel;
 
     while (!feof(f)) {
-        fscanf(f, "%s %s", key, probs);
+        fscanf(f, "%s %s %s", key, probs, vowel);
         prob = strtof(probs, NULL);
+        is_vowel = vowel[0] - '0';
+        uppercase_symbol = toupper(key[0]);
 
-        bt_T_Info to_insert = {key[0], prob};
+        bt_T_Info to_insert = {key[0], uppercase_symbol, prob, is_vowel};
         bt_Insert(bt, to_insert);
     }
     fclose(f);

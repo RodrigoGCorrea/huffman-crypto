@@ -26,7 +26,9 @@ struct bt_node {
 
 struct bt_info {
     bt_T_Key key;
+    char upper_case_symbol;
     float prob;
+    bool is_vowel;
 };
 
 
