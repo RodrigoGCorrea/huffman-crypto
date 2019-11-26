@@ -13,4 +13,5 @@ add_executable(huffman_crypto
         b-tree/list.c
         huffman-tree/huffman-tree.c
         huffman-tree/minheap.c
+        utils/cmd.c
         )
