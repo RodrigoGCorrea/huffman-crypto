@@ -4,6 +4,8 @@
 #include "b-tree.h"
 
 bt_Tree* bt_Gen_Tree_From_File(char *file, int t);
+bt_Tree* bt_Gen_Tree_From_File_No_Vowels(char *file, int t);
+bt_Tree* bt_Gen_Tree_From_File_No_Consonats(char *file, int t);
 
 char* bt_Encode_String(bt_Tree *bt, char *msg);
 char* bt_Decode_String(bt_Tree *bt, char *msg);

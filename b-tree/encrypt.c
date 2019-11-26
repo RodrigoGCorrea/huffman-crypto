@@ -60,6 +60,58 @@ bt_Tree* bt_Gen_Tree_From_File(char *file, int t) {
     return bt;
 }
 
+bt_Tree* bt_Gen_Tree_From_File_No_Vowels(char *file, int t) {
+    FILE *f = fopen(file, "r");
+    if (!f) exit(1);
+
+    bt_Tree *bt = bt_Create(t);
+
+    char key[2], probs[10], vowel[2], uppercase_symbol;
+    float prob;
+    bool is_vowel;
+
+    while (!feof(f)) {
+        fscanf(f, "%s %s %s", key, probs, vowel);
+        prob = strtof(probs, NULL);
+        is_vowel = vowel[0] - '0';
+        uppercase_symbol = toupper(key[0]);
+
+        if (is_vowel != true) {
+            bt_T_Info to_insert = {key[0], uppercase_symbol, prob, is_vowel};
+            bt_Insert(bt, to_insert);
+        }
+    }
+    fclose(f);
+
+    return bt;
+}
+
+bt_Tree* bt_Gen_Tree_From_File_No_Consonats(char *file, int t) {
+    FILE *f = fopen(file, "r");
+    if (!f) exit(1);
+
+    bt_Tree *bt = bt_Create(t);
+
+    char key[2], probs[10], vowel[2], uppercase_symbol;
+    float prob;
+    bool is_vowel;
+
+    while (!feof(f)) {
+        fscanf(f, "%s %s %s", key, probs, vowel);
+        prob = strtof(probs, NULL);
+        is_vowel = vowel[0] - '0';
+        uppercase_symbol = toupper(key[0]);
+
+        if (is_vowel == true) {
+            bt_T_Info to_insert = {key[0], uppercase_symbol, prob, is_vowel};
+            bt_Insert(bt, to_insert);
+        }
+    }
+    fclose(f);
+
+    return bt;
+}
+
 char* bt_Encode_String(bt_Tree *bt, char *msg) {
     if (!msg) return NULL;
     if (!bt) return NULL;
