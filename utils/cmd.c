@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "cmd.h"
 
@@ -156,9 +157,29 @@ void cmd_Print_Btree(bt_Node *bn, int level) {
             for (int j = 0; j <= level; j++)
                 printf("   ");
 
-            printf("[%c, %.2f]\n", bn->info[i].key, bn->info[i].prob);
+            printf("[%c]\n", bn->info[i].key);
         }
 
         cmd_Print_Btree(bn->child[i], level + 1);
+    }
+}
+
+void cmd_Print_Btree_Show_All(bt_Node *bn, int level) {
+    if(bn != NULL) {
+        int i;
+
+        for (i = 0; i <= bn->nkey - 1; i++) {
+            cmd_Print_Btree_Show_All(bn->child[i], level + 1);
+
+            for (int j = 0; j <= level; j++)
+                printf("   ");
+
+            printf("[%c, %c, %.2f]\n",
+                    bn->info[i].key,
+                    bn->info[i].upper_case_symbol,
+                    bn->info[i].prob);
+        }
+
+        cmd_Print_Btree_Show_All(bn->child[i], level + 1);
     }
 }
